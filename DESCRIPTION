@@ -1,0 +1,11 @@
+Package: wisselstroom
+Title: Gain Insight In Switching Studies
+Version: 0.0.0.9000
+Authors@R: 
+    person("Martine", "Jansen", , "mm.jansen@fontys.nl", role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0007-8085-096X"))
+Description: Each Higher Educational Institute (HEI) in the Netherlands can request its institute-specific "Bekostigingsbestanden". The functions in this package extract information about Switching Studies, and so facilitate the HEIs gain insight in the prevalence of Switching Studies.  
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.0.0
