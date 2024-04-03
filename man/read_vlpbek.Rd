@@ -4,7 +4,10 @@
 \alias{read_vlpbek}
 \title{Read in a vlpbek file}
 \usage{
-read_vlpbek()
+read_vlpbek(locationname_vlpbek)
+}
+\arguments{
+\item{locationname_vlpbek}{location of the vlpbek type of file (bekostigingsbestand)}
 }
 \value{
 a dataframe containing the raw vlpbek file

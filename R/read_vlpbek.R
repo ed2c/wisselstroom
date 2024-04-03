@@ -22,14 +22,12 @@ is_vlpbek <- function(chosen_locationname) {
 #' `read_vlpbek` reads in a vlpbek type of file (bekostigingsbestand), containing interim data about funding.
 #'  The function opens a window with which a file can be chosen.
 #'
+#' @param locationname_vlpbek location of the vlpbek type of file (bekostigingsbestand)
+#'
 #' @return a dataframe containing the raw vlpbek file
 #' @export
 #'
-read_vlpbek <- function() {
-  locationname_vlpbek <- utils::choose.files(
-    caption = "Select VLPBEK",
-    multi = FALSE
-  )
+read_vlpbek <- function(locationname_vlpbek) {
 
   if (!is_vlpbek(locationname_vlpbek)) stop("The name of the chosen file is not compatible with a VLPBEK file. Be sure to select a .csv file that starts with `VLPBEK_`.")
 
