@@ -34,6 +34,7 @@ read_vlpbek <- function(locationname_vlpbek) {
   vlpbek <- utils::read.csv(
     file = locationname_vlpbek,
     sep = "|",
+    colClasses = "character",
     header = FALSE
   )
   vlpbek
