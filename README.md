@@ -24,5 +24,9 @@ devtools::install_github("ed2c/wisselstroom")
 
 ## Example
 
-At the moment there are no functions in this package yet. Nor are
-examples.
+Read in your VLPBEK file with `read_vlpbek()`:
+
+``` r
+path_to_file <- here::here("extdata", "VLPBEK_2025_20240115_99XX.csv")
+read_vlpbek(path_to_file)
+```
