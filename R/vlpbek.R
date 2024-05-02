@@ -6,10 +6,11 @@
 
 # to suppres the "no visible binding for global variable"
 utils::globalVariables(c("student_id", "V1", "V12", "V13","V4", "V9","V10",
-                         "V11", "V14", "V15", "V16", "V17", "V19"))
+                         "V11", "V14", "V15", "V16", "V17", "V19",
+                         "date_enrolment", "date_graduation"))
 
 
-# helper function
+# helper functions ------------------------------------------------------------
 make_date <- function(date_as_yyyymmdd){
   paste(substr(date_as_yyyymmdd, 1, 4),
         substr(date_as_yyyymmdd, 5, 6),
@@ -17,6 +18,16 @@ make_date <- function(date_as_yyyymmdd){
         sep = '-') |>
     as.Date()
 }
+
+make_academic_year <- function(date_as_yyyymmdd){
+  year <- substr(date_as_yyyymmdd, start = 1, stop = 4)
+  month <- substr(date_as_yyyymmdd, start = 6, stop = 7)
+  academic_year <- ifelse(month %in% c("09", "10", "11", "12"),
+                          paste0(year, "/", as.integer(year)+1),
+                          paste0(as.integer(year) -1, "/", year))
+  academic_year
+}
+
 
 # makes the actual thing
 new_vlpbek <- function(df = data.frame()){
@@ -52,7 +63,8 @@ new_vlpbek <- function(df = data.frame()){
                   date_disenrolment = V13,
                   enrolment_form = V15,
                   program_form = V16,
-                  sector = V19)
+                  sector = V19) |>
+    dplyr::mutate(academic_year = make_academic_year(date_enrolment))
 
   df_brr <- df_edited |>
     dplyr::filter(V1 == "BRR") |>
@@ -65,7 +77,8 @@ new_vlpbek <- function(df = data.frame()){
                   program_phase = V12,
                   date_graduation = V14,
                   enrolment_form = V15,
-                  sector = V17)
+                  sector = V17) |>
+    dplyr::mutate(academic_year = make_academic_year(date_graduation))
 
   value <- list("brin_own" = df[1,2],
                 "year_funding" = df[1,3],
@@ -81,11 +94,11 @@ new_vlpbek <- function(df = data.frame()){
 
 #' Makes a vlpbek object
 #'
-#' Takes the data.frame resulting from read_vlpbek_data() and makes a list object
+#' Takes the data.frame resulting from read_vlpbek_data() and returns a list object
 #'
-#' @param df a data.frame resulting from using the read_vlpbek_data() on the funding file csv file
+#' @param df a data.frame resulting from using the read_vlpbek_data() on the funding csv file
 #'
-#' @return an list with 6 objects,
+#' @return a list with 6 objects:
 #' \item{brin_own}{text containing the brin of the higher educational institution to which the funding file refers to}
 #' \item{year_funding}{text containing the year the funding file refers to}
 #' \item{date_retrieval}{date containing the date the funding file was retrieved from DUO}

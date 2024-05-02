@@ -7,10 +7,10 @@
 vlpbek(df = data.frame())
 }
 \arguments{
-\item{df}{a data.frame resulting from using the read_vlpbek_data() on the funding file csv file}
+\item{df}{a data.frame resulting from using the read_vlpbek_data() on the funding csv file}
 }
 \value{
-an list with 6 objects,
+a list with 6 objects:
 \item{brin_own}{text containing the brin of the higher educational institution to which the funding file refers to}
 \item{year_funding}{text containing the year the funding file refers to}
 \item{date_retrieval}{date containing the date the funding file was retrieved from DUO}
@@ -19,7 +19,7 @@ an list with 6 objects,
 \item{degrees}{data.frame containing data of acquired degrees of these students }
 }
 \description{
-Takes the data.frame resulting from read_vlpbek_data() and makes a list object
+Takes the data.frame resulting from read_vlpbek_data() and returns a list object
 }
 \examples{
 \dontrun{
