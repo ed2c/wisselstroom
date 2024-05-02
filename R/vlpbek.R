@@ -42,8 +42,8 @@ new_vlpbek <- function(df = data.frame()){
     # if  V2 has a value person_id gets that number , prefixed with a b, short for bsn
     # else it becomes V3, with prefix e for educationalnumber
     # so even if columns V2 and V3 have numbers in common there will not be any confusion
-    dplyr::mutate(student_id = dplyr::case_when(V1 %in% c("BLB", "BRD", "BRR") & !is.na(V2) ~ paste0("b",V2),
-                                                V1 %in% c("BLB", "BRD", "BRR") & is.na(V2) ~ paste0("e", V3),
+    dplyr::mutate(student_id = dplyr::case_when(V1 %in% c("BLB", "BRD", "BRR") & !(V2 == "") ~ paste0("b",V2),
+                                                V1 %in% c("BLB", "BRD", "BRR") & V2 == "" ~ paste0("e", V3),
                                                 TRUE ~ NA_character_))
   df_blb <- df_edited |>
     dplyr::filter(V1 == "BLB") |>
