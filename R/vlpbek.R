@@ -81,7 +81,7 @@ new_vlpbek <- function(df = data.frame()){
                 "date_retrieval" = make_date(df[1,4]),
                 "enrolments" = df_brd,
                 "degrees" = df_brr)
-  class = "vlpbek"
+  class(value) <- "vlpbek"
   value
 }
 
