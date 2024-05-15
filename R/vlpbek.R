@@ -45,11 +45,7 @@ new_vlpbek <- function(df = data.frame()){
     dplyr::mutate(student_id = dplyr::case_when(V1 %in% c("BLB", "BRD", "BRR") & !(V2 == "") ~ paste0("b",V2),
                                                 V1 %in% c("BLB", "BRD", "BRR") & V2 == "" ~ paste0("e", V3),
                                                 TRUE ~ NA_character_))
-  df_blb <- df_edited |>
-    dplyr::filter(V1 == "BLB") |>
-    dplyr::select(student_id)
-
-  df_brd <- df_edited |>
+   df_brd <- df_edited |>
     dplyr::filter(V1 == "BRD") |>
     dplyr::mutate(V12 = make_date(V12),
                   V13 = make_date(V13)) |>
@@ -83,7 +79,6 @@ new_vlpbek <- function(df = data.frame()){
   value <- list("brin_own" = df[1,2],
                 "year_funding" = df[1,3],
                 "date_retrieval" = make_date(df[1,4]),
-                "students" = df_blb,
                 "enrolments" = df_brd,
                 "degrees" = df_brr)
   class = "vlpbek"
