@@ -18,13 +18,13 @@ utils::globalVariables(c("b1", "b2", "bez_b", "bez_t",
 #' @param column_to vector of character labels, indicating the righthand side
 #' @param color_from vector of color values, indicating colors for the lefthand side
 #' @param color_to vector of color values, indicating colors for the righthand side
-#' @param values vector of values, indicating the widht of the ribbon
+#' @param values vector of values, indicating the width of the ribbon
 #' @param padding constant used for displaying space between ribbons
-#' @param alpha constant used for making colors transparent
+#' @param alpha numeric, transparancy of colors (0 = complete transparent, 1 = opaque)
 #' @param display_labels boolean used for displaying labels or not
 #' @param match_label_color boolean used to indicate labels in same color as nodes
 #' @param label_fontface string used for styling the font of labels
-#' @param label_size number indicating hte font size of labels
+#' @param label_size number indicating the font size of labels
 #'
 #' @return a ggplot with geom_ribbons
 #' @export

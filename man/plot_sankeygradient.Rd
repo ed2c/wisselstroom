@@ -27,11 +27,11 @@ plot_sankeygradient(
 
 \item{color_to}{vector of color values, indicating colors for the righthand side}
 
-\item{values}{vector of values, indicating the widht of the ribbon}
+\item{values}{vector of values, indicating the width of the ribbon}
 
 \item{padding}{constant used for displaying space between ribbons}
 
-\item{alpha}{constant used for making colors transparent}
+\item{alpha}{numeric, transparancy of colors (0 = complete transparent, 1 = opaque)}
 
 \item{display_labels}{boolean used for displaying labels or not}
 
@@ -39,7 +39,7 @@ plot_sankeygradient(
 
 \item{label_fontface}{string used for styling the font of labels}
 
-\item{label_size}{number indicating hte font size of labels}
+\item{label_size}{number indicating the font size of labels}
 }
 \value{
 a ggplot with geom_ribbons
