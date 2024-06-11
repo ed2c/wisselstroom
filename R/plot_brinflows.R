@@ -8,9 +8,9 @@
 # helper function
 
 prepare_brinflows <- function(my_vlp_compact,
-                              color_brin_own = "darkgreen",
-                              color_other_he = "red",
-                              color_brin_own_other_he = "orange",
+                              color_brin_own = "#853887",
+                              color_other_he = "#246ABE",
+                              color_brin_own_other_he = "#00B17E",
                               color_outside_he = "grey",
                               label_brin_own = "this HEI",
                               label_other_he = "other HEI",
@@ -84,9 +84,9 @@ prepare_brinflows <- function(my_vlp_compact,
 #' plot_brinflows(my_vlpbek_compact)
 #' }
 plot_brinflows <-function(my_vlp_compact,
-                          color_brin_own = "darkgreen",
-                          color_other_he = "red",
-                          color_brin_own_other_he = "orange",
+                          color_brin_own = "#853887",
+                          color_other_he = "#246ABE",
+                          color_brin_own_other_he = "#00B17E",
                           color_outside_he = "grey",
                           label_brin_own = "this HEI",
                           label_other_he = "other HEI",
