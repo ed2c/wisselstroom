@@ -22,7 +22,7 @@ plot_brinflows(
 )
 }
 \arguments{
-\item{my_vlp_compact}{list containing the compact version of a vlpbek object}
+\item{my_vlp_compact}{vlpbek_compact object}
 
 \item{color_brin_own}{string containing color code used for brin_own}
 

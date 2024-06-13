@@ -31,7 +31,7 @@ add_cols <- function(df, cols) {
 #'
 #' @param my_vlpbek a vlpbek object
 #'
-#' @return a list with 7 objects
+#' @return a vlpbek_object as a list with 7 objects
 #' \item{brin_own}{text containing the brin of the higher educational institution to which the funding file refers to}
 #' \item{enrolments_degrees_compact}{data frame with one row per academic year, student, brin and program_code, adorned with date_degree when applicable and a note if the student has at most a single enrolment per year}
 #' \item{presences_brin}{dataframe with one row per student per academic year displaying enrolmentinformation regarding brin: either in brin_own and/or other HE, or outside HE }
@@ -171,13 +171,15 @@ compact_vlpbek <- function(my_vlpbek){
                                           name = "n_students")
 
   #return
-  list(brin_own = brin_own,
-       enrolments_degrees_compact = enrolments_degrees_compact,
-       presences_brin = presences_brin,
-       presences_level = presences_level,
-       switches = switches,
-       summary_presences_brin = summary_presences_brin,
-       summary_presences_level = summary_presences_level
-  )
+  value <- list(brin_own = brin_own,
+                enrolments_degrees_compact = enrolments_degrees_compact,
+                presences_brin = presences_brin,
+                presences_level = presences_level,
+                switches = switches,
+                summary_presences_brin = summary_presences_brin,
+                summary_presences_level = summary_presences_level
+                )
+  class(value) <- "vlpbek_compact"
+  value
 }
 

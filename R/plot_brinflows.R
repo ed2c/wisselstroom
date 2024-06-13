@@ -16,9 +16,10 @@ prepare_brinflows <- function(my_vlp_compact,
                               label_other_he = "other HEI",
                               label_outside_he = "outside HE"){
 
+
   # input validity  checks
   stopifnot(nrow(my_vlp_compact$summary_presences_brin) > 0)
-  stopifnot(class(my_vlp_compact) == "list")
+  stopifnot(class(my_vlp_compact) == "vlpbek_compact")
 
   # combination label
   label_brin_own_other_he <- paste(label_brin_own, label_other_he, sep = " & ")
@@ -61,7 +62,7 @@ prepare_brinflows <- function(my_vlp_compact,
 #'
 #' `plot_brinflows()` takes the summary_presences_brin from a vlpbek_compact list, and turns it into a sankey diagram
 #'
-#' @param my_vlp_compact list containing the compact version of a vlpbek object
+#' @param my_vlp_compact vlpbek_compact object
 #' @param color_brin_own string containing color code used for brin_own
 #' @param color_other_he string containing color code used for other HE
 #' @param color_brin_own_other_he string containing color code used for brin_own & other HE
@@ -100,7 +101,7 @@ plot_brinflows <-function(my_vlp_compact,
 
   # input validity  checks
   stopifnot(nrow(my_vlp_compact$summary_presences_brin) > 0)
-  stopifnot(class(my_vlp_compact) == "list")
+  stopifnot(class(my_vlp_compact) == "vlpbek_compact")
 
   # prepare data
   df_plot <- prepare_brinflows(my_vlp_compact = my_vlp_compact,

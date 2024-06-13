@@ -10,7 +10,7 @@ compact_vlpbek(my_vlpbek)
 \item{my_vlpbek}{a vlpbek object}
 }
 \value{
-a list with 7 objects
+a vlpbek_object as a list with 7 objects
 \item{brin_own}{text containing the brin of the higher educational institution to which the funding file refers to}
 \item{enrolments_degrees_compact}{data frame with one row per academic year, student, brin and program_code, adorned with date_degree when applicable and a note if the student has at most a single enrolment per year}
 \item{presences_brin}{dataframe with one row per student per academic year displaying enrolmentinformation regarding brin: either in brin_own and/or other HE, or outside HE }
