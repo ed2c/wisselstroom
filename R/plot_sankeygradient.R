@@ -49,7 +49,6 @@ plot_sankeygradient <- function(column_from,
                                 label_fontface = 'bold',
                                 label_size = 10) {
 
-  stopifnot(utils::packageVersion("ggplot2") >= 3.5 )
 
   # flows will be geom_ribbons from left to right
   # calculate left coordinates bottom and top of the geom_ribbon
