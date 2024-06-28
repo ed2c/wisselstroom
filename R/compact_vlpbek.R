@@ -56,16 +56,18 @@ compact_vlpbek <- function(my_vlpbek){
   max_academic_year <- max(my_vlpbek$enrolments$academic_year)
   brin_own <- my_vlpbek$brin_own
 
-  degrees_compact <- my_vlpbek$degrees |>
-    dplyr::distinct(academic_year, student_id, BRIN, program_code,
-                    program_level, program_phase, date_graduation) |>
+
+  degrees_compact <- suppressMessages(
+    my_vlpbek$degrees |>
+    dplyr::group_by(academic_year, student_id, BRIN, program_code,
+                    program_level, program_phase) |>
+    dplyr::summarise(date_graduation = min(date_graduation)) |>
+    dplyr::ungroup() |>
     tidyr::pivot_wider(names_from = program_phase,
                        values_from = date_graduation,
-                       names_prefix = "date_graduation_") |>
-    add_cols(c("date_graduation_A",
-               "date_graduation_B",
-               "date_graduation_M",
-               "date_graduation_D"))
+                       names_prefix = "date_graduation_")
+    ) |>
+    add_cols( c("date_graduation_A", "date_graduation_B", "date_graduation_M", "date_graduation_D"))
 
   enrolments_compact <- my_vlpbek$enrolments |>
     # not program phase, this will make distinction between prop and main phase
