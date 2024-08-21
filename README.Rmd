@@ -29,6 +29,15 @@ You can install the development version of wisselstroom from [GitHub](https://gi
 devtools::install_github("ed2c/wisselstroom")
 ```
 
+If you want to have the vignettes as well:  
+
+``` r
+devtools::install_github("ed2c/wisselstroom", dependencies = TRUE, build_vignettes = TRUE)
+```
+
+
+
+
 ## Example
 
 Read in your VLPBEK file with `read_vlpbek_data()`:
