@@ -52,7 +52,7 @@ A  bekostigingsbestand can be requested containing information about maximum two
 -  The *size* of a bekostigingsbestand depends on the HEI. For a larger university of applied sciences, and for the maximum time horizon it can be around 15MB (voorlopig bekostigingsbestand).  
 -  The file *format* is a csv, with a "|" as delimiter. 
 
-<img src="man/figures/bronebstand.png" align="left" height="139" alt="" />
+<img src="man/figures/bronbestand.png" align="left" height="139" alt="" />
 
 
 
