@@ -8,13 +8,16 @@ Description: Each Higher Educational Institute (HEI) in the Netherlands can requ
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Suggests: 
     bezier,
     ggplot2 (>= 3.5),
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
     dplyr,
     stringr,
     tidyr
+VignetteBuilder: knitr

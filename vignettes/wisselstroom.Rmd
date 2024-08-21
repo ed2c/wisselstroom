@@ -1,0 +1,61 @@
+---
+title: "Introduction to wisselstroom"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to wisselstroom}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(wisselstroom)
+```
+
+
+Each year students start a study programme in institutions of higher education. In the academic year 2023/2024 126059[^https://www.vereniginghogescholen.nl/kennisbank/feiten-en-cijfers/artikelen/dashboard-instroom-inschrijvingen-en-diploma-s] students started a programme at a university of applied sciences in the Netherlands where they did not study before. These students are not all new in higher education. About 15% of them were previously enrolled in another institution. And of course there are students switching programmes within and between research universities and universities of applied sciences.
+
+With help of the package `wisselstroom` we can gain insight in the flows from and to our own (dutch) institution of higher education. It makes use of the institution specific files relating to the funding of the enrolments, the "bekostigingsbestanden".  
+
+These insights can for instance be used to enhance study information, so that prospective students can make a better informed choice between study programmes.  
+
+This document gives a short introduction to the bekostigingsbestanden, and shows you how to apply the functions from the package `wisselstroom` to them.    
+
+Note to readers outside of HEI Netherlands: this is very specific to the dutch higher educational system, so probably not relevant outside dutch HE.
+
+
+
+
+
+# Bekostigingsbestanden  
+
+## Purpose
+
+A bekostigingsbestand is an analysis file specific for an institution of higher education in the Netherlands that contains funding decisions for all enrolments of that HEI. In order to enable the HEI to check the decisions, it also contains information about all other enrolments and degrees obtained of the students involved.  
+So not only the enrolments at the own HEI, also enrolments at other HEIs.  
+
+A  bekostigingsbestand can be requested containing information about maximum two years. That implies that we not only are able to gain insight in the programmes they enrolled in *before*, but also *after* enrolment in the programmes of the own HEI. 
+
+## Technical details
+
+-  The name of a bekostigingsbestand contains relevant information. The package contains an example bekostigingsbestand: "VLPBEK_2025_20240115_99XX.csv". 
+    -  VLPBEK tells us it is a voorlopig bekostigingsbestand (a preliminary file). Other options for the first 5 characters are DEFBEK (definitive file) or HISBEK (historical file)
+    -  2025 is the year the funding relates to
+    -  20240115 is the date the file was created by DUO
+    -  99XX is the BRIN of the HEI; BRIN is an abbreviation of BasisRegistratieINstellingen, an administrative code
+-  The *size* of a bekostigingsbestand depends on the HEI. For a larger university of applied sciences, and for the maximum time horizon it can be around 15MB (voorlopig bekostigingsbestand).  
+-  The file *format* is a csv, with a "|" as delimiter. 
+
+<img src="man/figures/bronebstand.png" align="left" height="139" alt="" />
+
+
+
+
+
+##
