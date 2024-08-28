@@ -56,6 +56,20 @@ my_vlpbek_compact <- compact_vlpbek(my_vlpbek)
 plot_brinflows(my_vlpbekcompact, display_labels = TRUE)
 ```
 
+## Vignettes
+
+Read the introduction vignette with more background information:
+
+``` r
+vignette("wisselstroom", package = "wisselstroom")
+```
+
+Browse the vignettes:
+
+``` r
+browseVignettes("wisselstroom")
+```
+
 ## Credits
 
 The code for the Sankey diagram is adapted from code found end of may
