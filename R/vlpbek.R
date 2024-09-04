@@ -72,7 +72,7 @@ new_vlpbek <- function(df = data.frame()){
                   program_level = V11,
                   program_phase = V12,
                   date_graduation = V14,
-                  enrolment_form = V15,
+                  program_form = V15,
                   sector = V17) |>
     dplyr::mutate(academic_year = make_academic_year(date_graduation))
 
