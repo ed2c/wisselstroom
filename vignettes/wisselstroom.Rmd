@@ -7,13 +7,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r, include = FALSE, echo=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 ```
-
 
 
 Each year students start a study programme in institutions of higher education. In the academic year 2023/2024 126059 students started a programme at a university of applied sciences in the Netherlands where they did not study before^[https://www.vereniginghogescholen.nl/kennisbank/feiten-en-cijfers/artikelen/dashboard-instroom-inschrijvingen-en-diploma-s]. These students are not all new in higher education. About 15% of them were previously enrolled in another institution. And of course there are students switching programmes within and between research universities and universities of applied sciences.
@@ -56,10 +55,15 @@ A  bekostigingsbestand can be requested containing information about maximum two
 
 A screenshot of the example bekostigingsbestand:  
 
-<img src="bronbestand.png" align="left" height="139" alt="" />
+
+```{r out.width = '70%', echo = FALSE}
+knitr::include_graphics("bronbestand.png")
+```
+
 
 
 # Working with a bekostigingsbestand
+
 
 ## Reading into a basic `data.frame`
 
@@ -82,7 +86,7 @@ path_to_file <- file.path(system.file("extdata", package = 'wisselstroom'),
 my_vlpbek_data <- read_vlpbek_data(path_to_file)
 ```
 
-## Inspecting the `data.frame`
+## A closer look at the `data.frame`
 
 Have a look at the structure of the read-in example data:  
 
@@ -116,14 +120,14 @@ This `data.frame` is useful if you want to see what the csv actually contains. F
 my_vlpbek <- vlpbek(my_vlpbek_data)
 ```
 
-## Inspecting the `vlpbek` object
+## A closer look at the `vlpbek` object
 
 The `my_vlpbek` object is a list containing `r length(my_vlpbek)` elements:  
 
 -  `brin_own`: the administrative number of the HEI concerned
 -  `year_funding`: the financial year in which the funding is disbursed
 -  `date_retrieval`: the date the original bekostigingsbestand is made
--  `enrolment`: a `data.frame` containing enrolment data
+-  `enrolments`: a `data.frame` containing enrolment data
 -  `degrees`: a `data.frame` containing data on obtained degrees
 
 
@@ -158,9 +162,23 @@ To get some summary insights, we can make a `compact_vlpbek` object
 my_vlpbek_compact <- compact_vlpbek(my_vlpbek)
 ```
 
-## Inspecting the `compact_vlpbek` object 
+## A closer look at the `compact_vlpbek` object 
 
-TBD
+The `my_vlpbek_compact` object is a list containing `r length(my_vlpbek_compact)` elements:  
+
+-  `brin_own`: the administrative number of the HEI concerned
+-  `enrolments_degrees_compact`: a `data.frame` with compact enrolment data, adorned with degree data if applicable 
+-  `presences_brin`: a `data.frame` with summary data per student regarding enrolment in brins
+-  `presences_level`: a `data.frame` with summary data per student regarding enrolment in levels
+-  `switches`: a `data.frame` containing data on switches (from a program without a degree to another program)
+-  `summary_presences_brin`: presences_brin per academic year summarised over students
+-  `summary_presences_level`: presences_level per academic year summarised over students
+
+Have a look at the structure of the newly made `my_vlpbek` object:   
+
+```{r}
+str(my_vlpbek)
+```
 
 
 
