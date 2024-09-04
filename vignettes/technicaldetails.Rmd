@@ -1,0 +1,103 @@
+---
+title: "Technical details"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Technical details}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+In this article you can read about the calculations made to obtain the `wisselstroom` objects.
+
+# Setup
+
+```{r setup}
+library(wisselstroom)
+```
+
+```{r}
+# making the objects
+
+# To read in your institution specific bekostigingsbestand, 
+# change path_to_file accordingly.
+path_to_file <- file.path(system.file("extdata", package = 'wisselstroom'),
+                           "VLPBEK_2025_20240115_99XX.csv")
+
+# read the data and place it in an R data.frame
+my_vlpbek_data <- read_vlpbek_data(path_to_file)
+
+# make the my_vlpbek object from the my_vlpbek_data object
+my_vlpbek <- vlpbek(my_vlpbek_data)
+
+
+# make the my_vlpbek_compact object from the my_vlpbek object
+my_vlpbek_compact <- compact_vlpbek(my_vlpbek)
+```
+
+# A closer look at the objects
+
+## Data set as read in with `read_vlpbek()`
+
+```{r, eval=FALSE}
+my_vlpbek_data <- read_vlpbek_data(path_to_file)
+```
+
+The first 10 rows and 9 columns:  
+
+```{r}
+my_vlpbek_data[1:10,1:9]
+```
+
+Have a look at the structure of the read-in example data:  
+
+```{r}
+str(my_vlpbek_data)
+```
+
+## vlpbek object as made with `vlpbek()`
+
+```{r, eval = FALSE}
+# make the actual my_vlpbek object from the my_vlpbek_data object
+my_vlpbek <- vlpbek(my_vlpbek_data)
+```
+
+Have a look at the structure of the newly made `my_vlpbek` object:   
+
+```{r}
+str(my_vlpbek)
+```
+
+Compared to the original dataset, the VLP record is translated to first 3 items. The rows containing the SLR record (totals per record type) and the BLB records (studycareer totals per student) are ignored.  
+
+All the BRD records (enrolment) are placed in its own `enrolment` `data.frame`, as are all the BRR records (degrees) in the `degrees` `data.frame`.  Only the relevant columns for wisselstroom insights are included. A column `academic_year` is added to both `data.frames`, calculated on basis of `date_enrolment` for the `enrolments`, and on `date_graduation` for the `degrees`. 
+
+The column `student_id` is calculated from two original columns in the `my_vlpbek_data`, `V2` and `V3`:   
+-  `V2` contains the BSN of the student
+-  `V3` contains the onderwijsnummer (educationa number) of the student
+-  if `V2` has a value, student_id gets that number , prefixed with a "b", short for BSN
+-  if `V2` does not have a value, student_id becomes V3, with prefix "e" for educational number
+
+
+
+## vlpbek_compact object as made with `compact_vlpbek()`
+
+```{r, eval=FALSE}
+# make the my_vlpbek_compact object from the my_vlpbek object
+my_vlpbek_compact <- compact_vlpbek(my_vlpbek)
+```
+
+
+Have a look at the structure of `my_vlpbek` object:   
+
+```{r}
+str(my_vlpbek)
+```
+

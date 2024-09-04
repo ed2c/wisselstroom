@@ -41,6 +41,10 @@ So not only the enrolments at the own HEI, also enrolments at other HEIs.
 
 A  bekostigingsbestand can be requested containing information about maximum two years. That implies that we not only are able to gain insight in the programmes they enrolled in *before*, but also *after* enrolment in the programmes of the own HEI. 
 
+## How to obtain the bekostigingsbestanden
+
+TDB
+
 
 ## Technical specifications
 
@@ -88,11 +92,6 @@ my_vlpbek_data <- read_vlpbek_data(path_to_file)
 
 ## A closer look at the `data.frame`
 
-Have a look at the structure of the read-in example data:  
-
-```{r}
-str(my_vlpbek_data)
-```
 
 Every row in the csv file becomes a row in the `data.frame`.  The separator in the csv file splits up the row into columns. All `r ncol(my_vlpbek_data)` columns are read in as character. The columns are given a general name (V1, V2, ..., V5), since the content can have a different meaning depending on the sub file type.  In order to gain insight in wisselstromen, we do not need all content of the bekostigingsbestanden. In the example file, this content is x-ed out. 
 
@@ -131,22 +130,9 @@ The `my_vlpbek` object is a list containing `r length(my_vlpbek)` elements:
 -  `degrees`: a `data.frame` containing data on obtained degrees
 
 
-Have a look at the structure of the newly made `my_vlpbek` object:   
-
-```{r}
-str(my_vlpbek)
-```
-
 Compared to the original dataset, the VLP record is translated to first 3 items. The rows containing the SLR record (totals per record type) and the BLB records (studycareer totals per student) are ignored.  
 
-All the BRD records (enrolment) are placed in its own `enrolment` `data.frame`, as are all the BRR records (degrees) in the `degrees` `data.frame`.  Only the relevant columns for wisselstroom insights are included. A column `academic_year` is added to both `data.frames`, calculated on basis of `date_enrolment` for the `enrolments`, and on `date_graduation` for the `degrees`.  
-
-The column `student_id` is calculated from two original columns in the `my_vlpbek_data`, `V2` and `V3`:   
--  `V2` contains the BSN of the student
--  `V3` contains the onderwijsnummer (educationa number) of the student
--  if `V2` has a value, student_id gets that number , prefixed with a "b", short for BSN
--  if `V2` does not have a value, student_id becomes V3, with prefix "e" for educational number
-
+All the BRD records (enrolment) are placed in its own `enrolment` `data.frame`, as are all the BRR records (degrees) in the `degrees` `data.frame`.  Only the relevant columns for wisselstroom insights are included. A column `academic_year` is added to both `data.frames`, calculated on basis of `date_enrolment` for the `enrolments`, and on `date_graduation` for the `degrees`. The column `student_id` is calculated from two original columns in the `my_vlpbek_data`.
 
 If you want to address one of the 5 items in the `my_vlpbek` object, you can do that with the `$` operator, for instance: 
 
@@ -174,11 +160,6 @@ The `my_vlpbek_compact` object is a list containing `r length(my_vlpbek_compact)
 -  `summary_presences_brin`: presences_brin per academic year summarised over students
 -  `summary_presences_level`: presences_level per academic year summarised over students
 
-Have a look at the structure of the newly made `my_vlpbek` object:   
-
-```{r}
-str(my_vlpbek)
-```
 
 
 
