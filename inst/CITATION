@@ -1,0 +1,7 @@
+bibentry(
+  bibtype  = "Manual",
+  title    = "{wisselstroom}, an R package to obtain insight in patterns of study programme switch",
+  author   = c(person("Martine", "Jansen", role = "aut")),
+  publisher = "Center for Educational Data Analytics (CEDA), NPuls",
+  year     = "2024"
+)
