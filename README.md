@@ -45,10 +45,13 @@ This results in one large data set. Hidden in that data set are
 different sub data sets, which contain information about enrolment and
 degrees.
 
-<!-- To ease the access to this information, make a `vlpbek` object with the function `vlpbek()`:   -->
-<!-- ``` r -->
-<!-- my_vlpbek <- vlpbek(my_vlpbek_data) -->
-<!-- ``` -->
+To ease the access to this information, make a `vlpbek` object with the
+function `bek()`:
+
+``` r
+my_vlpbek <- bek(my_vlpbek_data)
+```
+
 <!-- Gain insights by using the `compact_vlpbek` function. The resulting object contains summary information related to switching HEIs and/or programs, which can be plotted using for instance `plot_brinflows()`: -->
 <!-- ``` r -->
 <!-- my_vlpbek_compact <- compact_vlpbek(my_vlpbek) -->

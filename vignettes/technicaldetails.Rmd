@@ -35,7 +35,7 @@ path_to_file <- file.path(system.file("extdata", package = 'wisselstroom'),
 my_vlpbek_data <- read_bek_data(path_to_file)
 
 # make the my_vlpbek object from the my_vlpbek_data object
-my_vlpbek <- vlpbek(my_vlpbek_data)
+my_vlpbek <- bek(my_vlpbek_data)
 
 
 # make the my_vlpbek_compact object from the my_vlpbek object
@@ -62,11 +62,11 @@ Have a look at the structure of the read-in example data:
 str(my_vlpbek_data)
 ```
 
-## vlpbek object as made with `vlpbek()`
+## bek object as made with `bek()`
 
 ```{r, eval = FALSE}
 # make the actual my_vlpbek object from the my_vlpbek_data object
-my_vlpbek <- vlpbek(my_vlpbek_data)
+my_vlpbek <- bek(my_vlpbek_data)
 ```
 
 Have a look at the structure of the newly made `my_vlpbek` object:   

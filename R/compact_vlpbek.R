@@ -49,7 +49,7 @@ add_cols <- function(df, cols) {
 compact_vlpbek <- function(my_vlpbek){
 
   # validation of input type
-  stopifnot(class(my_vlpbek) == "vlpbek")
+  stopifnot(class(my_vlpbek) == "bek")
 
   # helpers
   min_academic_year <- min(my_vlpbek$enrolments$academic_year)

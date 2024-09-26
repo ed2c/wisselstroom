@@ -112,11 +112,11 @@ The first column denotes the sub file type of the row:
 
 This `data.frame` is useful if you want to see what the csv actually contains. For the use of gaining wisselstroom insights, we will not use all columns, nor all sub file types. we only need a part of these data. This is the mext step.
 
-## Making a `vlpbek` object
+## Making a `bek` object
 
 ```{r}
 # make the actual my_vlpbek object from the my_vlpbek_data object
-my_vlpbek <- vlpbek(my_vlpbek_data)
+my_vlpbek <- bek(my_vlpbek_data)
 ```
 
 ## A closer look at the `vlpbek` object
