@@ -4,12 +4,12 @@
 \alias{after_degree}
 \title{Gives insight in enrolments year after degree}
 \usage{
-after_degree(program_of_interest, my_vlpbek_compact, prop_exam = FALSE)
+after_degree(program_of_interest, my_bek_compact, prop_exam = FALSE)
 }
 \arguments{
 \item{program_of_interest}{string containing the 5-character program code of interest}
 
-\item{my_vlpbek_compact}{a vlpbek_compact object}
+\item{my_bek_compact}{a bek_compact object}
 
 \item{prop_exam}{boolean, default FALSE, set to TRUE for after propedeutic exam}
 }
@@ -17,7 +17,7 @@ after_degree(program_of_interest, my_vlpbek_compact, prop_exam = FALSE)
 a list with 10 objects
 \item{program_of_interest}{the program code that was entered}
 \item{degree}{D for propedeutic, A for AD, B for Bachelor or M for Master}
-\item{brin_own}{brin_own from the my_vlpbek_compact object}
+\item{brin_own}{brin_own from the my_bek_compact object}
 \item{academic_year_from}{the earliest academic year in the data}
 \item{academic_year_to}{the latest academic year in the data}
 \item{n_students}{number of students with a degree from brin_own/program_of_interest in academic_year_from}
@@ -32,7 +32,7 @@ Gives insight in enrolments year after degree
 \examples{
 \dontrun{
 after_degree(program_of_interest = "34507",
- my_vlpbek_compact = my_vlp_compact_thing,
+ my_bek_compact = my_compact_thing,
   prop_exam = TRUE)
 }
 }
