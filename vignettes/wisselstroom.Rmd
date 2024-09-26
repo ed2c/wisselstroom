@@ -87,7 +87,7 @@ path_to_file <- file.path(system.file("extdata", package = 'wisselstroom'),
                            "VLPBEK_2025_20240115_99XX.csv")
 
 # read the data and place it in an R data.frame
-my_vlpbek_data <- read_vlpbek_data(path_to_file)
+my_vlpbek_data <- read_bek_data(path_to_file)
 ```
 
 ## A closer look at the `data.frame`

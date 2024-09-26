@@ -32,7 +32,7 @@ path_to_file <- file.path(system.file("extdata", package = 'wisselstroom'),
                            "VLPBEK_2025_20240115_99XX.csv")
 
 # read the data and place it in an R data.frame
-my_vlpbek_data <- read_vlpbek_data(path_to_file)
+my_vlpbek_data <- read_bek_data(path_to_file)
 
 # make the my_vlpbek object from the my_vlpbek_data object
 my_vlpbek <- vlpbek(my_vlpbek_data)
@@ -47,7 +47,7 @@ my_vlpbek_compact <- compact_vlpbek(my_vlpbek)
 ## Data set as read in with `read_vlpbek()`
 
 ```{r, eval=FALSE}
-my_vlpbek_data <- read_vlpbek_data(path_to_file)
+my_vlpbek_data <- read_bek_data(path_to_file)
 ```
 
 The first 10 rows and 9 columns:  
