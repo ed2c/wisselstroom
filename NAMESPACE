@@ -2,7 +2,7 @@
 
 export(after_degree)
 export(bek)
-export(compact_vlpbek)
+export(compact_bek)
 export(plot_brinflows)
 export(plot_sankeygradient)
 export(read_bek_data)

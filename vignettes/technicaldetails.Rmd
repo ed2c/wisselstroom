@@ -39,12 +39,12 @@ my_vlpbek <- bek(my_vlpbek_data)
 
 
 # make the my_vlpbek_compact object from the my_vlpbek object
-my_vlpbek_compact <- compact_vlpbek(my_vlpbek)
+my_vlpbek_compact <- compact_bek(my_vlpbek)
 ```
 
 # A closer look at the objects
 
-## Data set as read in with `read_vlpbek()`
+## Data set as read in with `read_bek_data()`
 
 ```{r, eval=FALSE}
 my_vlpbek_data <- read_bek_data(path_to_file)
@@ -86,12 +86,11 @@ The column `student_id` is calculated from two original columns in the `my_vlpbe
 -  if `V2` does not have a value, student_id becomes V3, with prefix "e" for educational number
 
 
-
-## vlpbek_compact object as made with `compact_vlpbek()`
+## vlpbek_compact object as made with `compact_bek()`
 
 ```{r, eval=FALSE}
 # make the my_vlpbek_compact object from the my_vlpbek object
-my_vlpbek_compact <- compact_vlpbek(my_vlpbek)
+my_vlpbek_compact <- compact_bek(my_vlpbek)
 ```
 
 

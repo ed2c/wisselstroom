@@ -1,6 +1,6 @@
 ################################################################################
 ###
-### Makes a summary from a vlpbek object
+### Makes a summary from a bek object
 ###
 ################################################################################
 
@@ -15,7 +15,7 @@ utils::globalVariables(c("program_level", "program_phase", "n_enrol",
                          "from_program_code", "to_program_code",
                          "n_students",
                          "academic_year", "BRIN", "program_code","brin_situation"
-                         ))
+))
 
 # helper function that adds a column if it does not yet exists
 # thanks to https://www.statology.org/r-add-column-if-does-not-exist/
@@ -27,11 +27,12 @@ add_cols <- function(df, cols) {
 }
 
 
-#' Makes a compacter version of a vlpbek object, with some summaries
+#' Makes a compacter version of a bek object, with some summaries
 #'
-#' @param my_vlpbek a vlpbek object
+#' @param my_bek a bek object
 #'
-#' @return a vlpbek_object as a list with 7 objects
+#' @return a bek_compact_object as a list with 8 objects
+#' \item{type}{text containing the type of bek file the data is from}
 #' \item{brin_own}{text containing the brin of the higher educational institution to which the funding file refers to}
 #' \item{enrolments_degrees_compact}{data frame with one row per academic year, student, brin and program_code, adorned with date_degree when applicable and a note if the student has at most a single enrolment per year}
 #' \item{presences_brin}{dataframe with one row per student per academic year displaying enrolmentinformation regarding brin: either in brin_own and/or other HE, or outside HE }
@@ -44,32 +45,34 @@ add_cols <- function(df, cols) {
 #'
 #' @examples
 #' \dontrun{
-#' vlpbek_compact(my_vlpbek)
+#' bek_compact(my_bek)
 #' }
-compact_vlpbek <- function(my_vlpbek){
+compact_bek <- function(my_bek){
 
   # validation of input type
-  stopifnot(class(my_vlpbek) == "bek")
+  stopifnot(class(my_bek) == "bek")
 
   # helpers
-  min_academic_year <- min(my_vlpbek$enrolments$academic_year)
-  max_academic_year <- max(my_vlpbek$enrolments$academic_year)
-  brin_own <- my_vlpbek$brin_own
+  min_academic_year <- min(my_bek$enrolments$academic_year)
+  max_academic_year <- max(my_bek$enrolments$academic_year)
+
+  type <- my_bek$type
+  brin_own <- my_bek$brin_own
 
 
   degrees_compact <- suppressMessages(
-    my_vlpbek$degrees |>
-    dplyr::group_by(academic_year, student_id, BRIN, program_code,
-                    program_level, program_phase) |>
-    dplyr::summarise(date_graduation = min(date_graduation)) |>
-    dplyr::ungroup() |>
-    tidyr::pivot_wider(names_from = program_phase,
-                       values_from = date_graduation,
-                       names_prefix = "date_graduation_")
-    ) |>
+    my_bek$degrees |>
+      dplyr::group_by(academic_year, student_id, BRIN, program_code,
+                      program_level, program_phase) |>
+      dplyr::summarise(date_graduation = min(date_graduation)) |>
+      dplyr::ungroup() |>
+      tidyr::pivot_wider(names_from = program_phase,
+                         values_from = date_graduation,
+                         names_prefix = "date_graduation_")
+  ) |>
     add_cols( c("date_graduation_A", "date_graduation_B", "date_graduation_M", "date_graduation_D"))
 
-  enrolments_compact <- my_vlpbek$enrolments |>
+  enrolments_compact <- my_bek$enrolments |>
     # not program phase, this will make distinction between prop and main phase
     dplyr::distinct(academic_year, student_id, BRIN, program_code,
                     program_level)
@@ -97,7 +100,7 @@ compact_vlpbek <- function(my_vlpbek){
 
 
   presences_brin <- enrolments_compact |>
-    dplyr::mutate(brin_situation = ifelse(BRIN == my_vlpbek$brin_own,
+    dplyr::mutate(brin_situation = ifelse(BRIN == my_bek$brin_own,
                                           "brin_own",
                                           "other HE")) |>
     dplyr::distinct(academic_year, student_id, brin_situation) |>
@@ -131,7 +134,7 @@ compact_vlpbek <- function(my_vlpbek){
                        # to have the new columns in alphabetical order
                        names_sort = TRUE)
 
- single_enrolments_without_degree <- enrolments_degrees_compact |>
+  single_enrolments_without_degree <- enrolments_degrees_compact |>
     dplyr::filter(enrolment_type == "single") |>
     # and no degree after the first year ( last year is oke)
     dplyr::filter(academic_year == max_academic_year |
@@ -173,15 +176,15 @@ compact_vlpbek <- function(my_vlpbek){
                                           name = "n_students")
 
   #return
-  value <- list(brin_own = brin_own,
+  value <- list(type = type,
+                brin_own = brin_own,
                 enrolments_degrees_compact = enrolments_degrees_compact,
                 presences_brin = presences_brin,
                 presences_level = presences_level,
                 switches = switches,
                 summary_presences_brin = summary_presences_brin,
                 summary_presences_level = summary_presences_level
-                )
-  class(value) <- "vlpbek_compact"
+  )
+  class(value) <- "bek_compact"
   value
 }
-

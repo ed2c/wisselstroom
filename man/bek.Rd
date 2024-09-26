@@ -10,12 +10,11 @@ bek(df = data.frame())
 \item{df}{a data.frame resulting from using the read_bek_data() on the funding csv file}
 }
 \value{
-a list with 6 objects:
+a list with 5 objects:
+\item{type}{text containing the type of bek file the data is from}
 \item{brin_own}{text containing the brin of the higher educational institution to which the funding file refers to}
-\item{year_funding}{text containing the year the funding file refers to}
 \item{date_retrieval}{date containing the date the funding file was retrieved from DUO}
-\item{students}{data.frame containing id's from persons with a least one enrolment or degree from the brin concerned }
-\item{enrolments}{data.frame containing data of enrolments of these students}
+\item{enrolments}{data.frame containing data of enrolments of students with a least one enrolment or degree from the brin concerned}
 \item{degrees}{data.frame containing data of acquired degrees of these students }
 }
 \description{

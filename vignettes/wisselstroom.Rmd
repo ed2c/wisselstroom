@@ -139,13 +139,13 @@ If you want to address one of the 5 items in the `my_vlpbek` object, you can do 
 -  `my_vlpbek$brin_own` to get a text containing the own brin
 -  `my_vlpbek$enrolment` to get a `data.frame` containing the enrolment data
 
-To get some summary insights, we can make a `compact_vlpbek` object 
+To get some summary insights, we can make a `compact_bek` object 
 
-## Making a `compact_vlpbek` object 
+## Making a `compact_bek` object 
 
 ```{r}
 # make the actual my_vlpbek_compact object from the my_vlpbek object
-my_vlpbek_compact <- compact_vlpbek(my_vlpbek)
+my_vlpbek_compact <- compact_bek(my_vlpbek)
 ```
 
 ## A closer look at the `compact_vlpbek` object 
