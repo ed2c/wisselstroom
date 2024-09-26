@@ -1,13 +1,13 @@
 ################################################################################
 ###
-### Plots global brinflows from vlpbek_compact list
+### Plots global brinflows from bek_compact list
 ###
 ################################################################################
 
 
 # helper function
 
-prepare_brinflows <- function(my_vlp_compact,
+prepare_brinflows <- function(my_bek_compact,
                               color_brin_own = "#853887",
                               color_other_he = "#246ABE",
                               color_brin_own_other_he = "#00B17E",
@@ -18,14 +18,14 @@ prepare_brinflows <- function(my_vlp_compact,
 
 
   # input validity  checks
-  stopifnot(nrow(my_vlp_compact$summary_presences_brin) > 0)
-  stopifnot(class(my_vlp_compact) == "vlpbek_compact")
+  stopifnot(nrow(my_bek_compact$summary_presences_brin) > 0)
+  stopifnot(class(my_bek_compact) == "bek_compact")
 
   # combination label
   label_brin_own_other_he <- paste(label_brin_own, label_other_he, sep = " & ")
 
   # basis data
-  brinflows_basis <- my_vlp_compact$summary_presences_brin
+  brinflows_basis <- my_bek_compact$summary_presences_brin
 
   # plot data
   plot_data_basis <- brinflows_basis |>
@@ -60,9 +60,9 @@ prepare_brinflows <- function(my_vlp_compact,
 
 #' Plots the global flows between brin_own, other HE and not in HE
 #'
-#' `plot_brinflows()` takes the summary_presences_brin from a vlpbek_compact list, and turns it into a sankey diagram
+#' `plot_brinflows()` takes the summary_presences_brin from a bek_compact list, and turns it into a sankey diagram
 #'
-#' @param my_vlp_compact vlpbek_compact object
+#' @param my_bek_compact bek_compact object
 #' @param color_brin_own string containing color code used for brin_own
 #' @param color_other_he string containing color code used for other HE
 #' @param color_brin_own_other_he string containing color code used for brin_own & other HE
@@ -82,9 +82,9 @@ prepare_brinflows <- function(my_vlp_compact,
 #'
 #' @examples
 #' \dontrun{
-#' plot_brinflows(my_vlpbek_compact)
+#' plot_brinflows(my_bek_compact)
 #' }
-plot_brinflows <-function(my_vlp_compact,
+plot_brinflows <-function(my_bek_compact,
                           color_brin_own = "#853887",
                           color_other_he = "#246ABE",
                           color_brin_own_other_he = "#00B17E",
@@ -100,11 +100,11 @@ plot_brinflows <-function(my_vlp_compact,
                           label_size = 10){
 
   # input validity  checks
-  stopifnot(nrow(my_vlp_compact$summary_presences_brin) > 0)
-  stopifnot(class(my_vlp_compact) == "vlpbek_compact")
+  stopifnot(nrow(my_bek_compact$summary_presences_brin) > 0)
+  stopifnot(class(my_bek_compact) == "bek_compact")
 
   # prepare data
-  df_plot <- prepare_brinflows(my_vlp_compact = my_vlp_compact,
+  df_plot <- prepare_brinflows(my_bek_compact = my_bek_compact,
                                color_brin_own = color_brin_own,
                                color_other_he = color_other_he,
                                color_brin_own_other_he = color_brin_own_other_he,

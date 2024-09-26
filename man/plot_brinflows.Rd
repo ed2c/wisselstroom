@@ -5,7 +5,7 @@
 \title{Plots the global flows between brin_own, other HE and not in HE}
 \usage{
 plot_brinflows(
-  my_vlp_compact,
+  my_bek_compact,
   color_brin_own = "#853887",
   color_other_he = "#246ABE",
   color_brin_own_other_he = "#00B17E",
@@ -22,7 +22,7 @@ plot_brinflows(
 )
 }
 \arguments{
-\item{my_vlp_compact}{vlpbek_compact object}
+\item{my_bek_compact}{bek_compact object}
 
 \item{color_brin_own}{string containing color code used for brin_own}
 
@@ -54,10 +54,10 @@ plot_brinflows(
 a ggplot, displaying the flows between brin_own, other HE and not in HE
 }
 \description{
-\code{plot_brinflows()} takes the summary_presences_brin from a vlpbek_compact list, and turns it into a sankey diagram
+\code{plot_brinflows()} takes the summary_presences_brin from a bek_compact list, and turns it into a sankey diagram
 }
 \examples{
 \dontrun{
-plot_brinflows(my_vlpbek_compact)
+plot_brinflows(my_bek_compact)
 }
 }
