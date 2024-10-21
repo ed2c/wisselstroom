@@ -70,12 +70,16 @@ make_flow_insights <- function(my_flow_basics){
                          values_from = date_graduation,
                          names_prefix = "date_graduation_")
   ) |>
-    add_cols( c("date_graduation_A", "date_graduation_B", "date_graduation_M", "date_graduation_D"))
+    add_cols( c("date_graduation_A", "date_graduation_B", "date_graduation_M", "date_graduation_D")) |> suppressMessages()
 
   enrolments_compact <- my_flow_basics$enrolments |>
     # not program phase, this will make distinction between prop and main phase
-    dplyr::distinct(academic_year, student_id, BRIN, program_code,
-                    program_level)
+    dplyr::group_by(academic_year, student_id, BRIN, program_code,program_level) |>
+    dplyr::summarise(program_form = paste(unique(program_form), collapse = " | "),
+                     date_enrolment = min(date_enrolment),
+                     date_disenrolment = max(date_disenrolment)) |>
+    dplyr::ungroup() |> suppressMessages()
+
 
   # determine whether student has in some year more than 1 enrolment
   enrolment_types <- enrolments_compact |>
