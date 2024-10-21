@@ -116,7 +116,7 @@ This `data.frame` is useful if you want to see what the csv actually contains. F
 
 ```{r}
 # make the actual my_vlpbek object from the my_vlpbek_data object
-my_vlpbek <- bek(my_vlpbek_data)
+my_vlpbek <- make_flow_basics(my_vlpbek_data)
 ```
 
 ## A closer look at the `vlpbek` object

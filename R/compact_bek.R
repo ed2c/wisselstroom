@@ -50,7 +50,7 @@ add_cols <- function(df, cols) {
 compact_bek <- function(my_bek){
 
   # validation of input type
-  stopifnot(class(my_bek) == "bek")
+  stopifnot(class(my_bek) == "flow_basics")
 
   # helpers
   min_academic_year <- min(my_bek$enrolments$academic_year)
@@ -185,6 +185,6 @@ compact_bek <- function(my_bek){
                 summary_presences_brin = summary_presences_brin,
                 summary_presences_level = summary_presences_level
   )
-  class(value) <- "bek_compact"
+  class(value) <- "flow_insights"
   value
 }

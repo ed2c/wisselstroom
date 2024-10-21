@@ -1,6 +1,6 @@
 ################################################################################
 ###
-### Makes a bek object
+### Makes a flow_basics object
 ###
 ################################################################################
 
@@ -32,7 +32,7 @@ make_academic_year <- function(date_as_yyyymmdd){
 
 
 # makes the actual thing
-new_bek <- function(df = data.frame()){
+new_flow_basics <- function(df = data.frame()){
 
   # validation that df is indeed a bek type df
   stopifnot(attributes(df)$comment %in% c("DEFBEK", "HISBEK", "VLPBEK"))
@@ -127,13 +127,13 @@ new_bek <- function(df = data.frame()){
                 date_retrieval = date_retrieval,
                 enrolments = df_rd,
                 degrees = df_rr)
-  class(value) <- "bek"
+  class(value) <- "flow_basics"
   value
 }
 
 
 
-#' Makes a bek object
+#' Makes a flow basics object
 #'
 #' Takes the data.frame resulting from read_bek_data() and returns a list object
 #'
@@ -150,11 +150,11 @@ new_bek <- function(df = data.frame()){
 #'
 #' @examples
 #' \dontrun{
-#' bek(my_bek_data)
+#' make_flow_basics(my_bek_data)
 #' }
-bek <- function(df = data.frame()){
+make_flow_basics <- function(df = data.frame()){
   # checks for input
   if(!is.data.frame(df)) {stop(paste("The supplied input is of class",class(df),", please input a data.frame."))}
   if(!attributes(df)$comment %in% c("DEFBEK", "HISBEK", "VLPBEK")){stop(paste("The supplied data.frame is not of the expected type. Please use the data.frame resulting from applying `read_bek_data()` on an original bek csv."))}
-  new_bek(df)
+  new_flow_basics(df)
 }
