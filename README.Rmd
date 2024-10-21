@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-Each Higher Educational Institute (HEI) in the Netherlands can request its institute-specific files named "Bekostigingsbestanden". The functions in this package extract information from these files related to switching studies. It facilitates the HEIs gain insight in the prevalence of switching studies. Flows can be visualised by a Sankey diagram.
+Each Higher Educational Institute (HEI) in the Netherlands can request its institute-specific files named "Bekostigingsbestanden". The functions in this package extract information from these files related to switching and continuing studies. It facilitates the HEIs gain insight in the prevalence of switching and/or continuing studies. Flows can be visualised by a Sankey diagram.
 
 ## Installation
 
@@ -41,7 +41,7 @@ devtools::install_github("ed2c/wisselstroom", dependencies = TRUE, build_vignett
 
 ## Example
 
-Read in your VLPBEK file with `read_bek_data()`:
+Read in your VLPBEK bekostigingsbestand file with `read_bek_data()`:
 
 ``` r
 path_to_file <- here::here("extdata", "VLPBEK_2025_20240115_99XX.csv")
@@ -50,17 +50,17 @@ my_vlpbek_data <- read_bek_data(path_to_file)
 
 This results in one large data set. Hidden in that data set are different sub data sets, which contain information about enrolment and degrees. 
 
-To ease the access to this information, make a `vlpbek` object with the function `bek()`:
+To ease the access to this information, make a `flow_basics` object with the function `make_flow_basics()`:
 
 ``` r
-my_vlpbek <- bek(my_vlpbek_data)
+my_flow_basics <- make_flow_basics(my_vlpbek_data)
 ```
 
-Gain insights by using the `compact_bek` function. The resulting object contains summary information related to switching HEIs and/or programs, which can be plotted using for instance `plot_brinflows()`:
+Gain insights by using the `make_flow_insights()` function. The resulting object contains summary information related to switching HEIs and/or programs, which can be plotted using for instance `plot_brinflows()`:
 
 ``` r
-my_vlpbek_compact <- compact_bek(my_vlpbek)
-plot_brinflows(my_vlpbekcompact, display_labels = TRUE)
+my_flow_insights <- make_flow_insights(my_flow_basics)
+plot_brinflows(my_flow_insights, display_labels = TRUE)
 ```
 
 ## Vignettes
