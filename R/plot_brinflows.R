@@ -1,13 +1,13 @@
 ################################################################################
 ###
-### Plots global brinflows from bek_compact list
+### Plots global brinflows from flows_insights list
 ###
 ################################################################################
 
 
 # helper function
 
-prepare_brinflows <- function(my_bek_compact,
+prepare_brinflows <- function(my_flow_insights,
                               color_brin_own = "#853887",
                               color_other_he = "#246ABE",
                               color_brin_own_other_he = "#00B17E",
@@ -18,14 +18,14 @@ prepare_brinflows <- function(my_bek_compact,
 
 
   # input validity  checks
-  stopifnot(nrow(my_bek_compact$summary_presences_brin) > 0)
-  stopifnot(class(my_bek_compact) == "bek_compact")
+  stopifnot(nrow(my_flow_insights$summary_presences_brin) > 0)
+  stopifnot(class(my_flow_insights) == "flow_insights")
 
   # combination label
   label_brin_own_other_he <- paste(label_brin_own, label_other_he, sep = " & ")
 
   # basis data
-  brinflows_basis <- my_bek_compact$summary_presences_brin
+  brinflows_basis <- my_flow_insights$summary_presences_brin
 
   # plot data
   plot_data_basis <- brinflows_basis |>
@@ -60,9 +60,9 @@ prepare_brinflows <- function(my_bek_compact,
 
 #' Plots the global flows between brin_own, other HE and not in HE
 #'
-#' `plot_brinflows()` takes the summary_presences_brin from a bek_compact list, and turns it into a sankey diagram
+#' `plot_brinflows()` takes the summary_presences_brin from a flow_insights list, and turns it into a sankey diagram
 #'
-#' @param my_bek_compact bek_compact object
+#' @param my_flow_insights a flows_insights object
 #' @param color_brin_own string containing color code used for brin_own
 #' @param color_other_he string containing color code used for other HE
 #' @param color_brin_own_other_he string containing color code used for brin_own & other HE
@@ -82,9 +82,9 @@ prepare_brinflows <- function(my_bek_compact,
 #'
 #' @examples
 #' \dontrun{
-#' plot_brinflows(my_bek_compact)
+#' plot_brinflows(my_flow_insights)
 #' }
-plot_brinflows <-function(my_bek_compact,
+plot_brinflows <-function(my_flow_insights,
                           color_brin_own = "#853887",
                           color_other_he = "#246ABE",
                           color_brin_own_other_he = "#00B17E",
@@ -100,11 +100,11 @@ plot_brinflows <-function(my_bek_compact,
                           label_size = 10){
 
   # input validity  checks
-  stopifnot(nrow(my_bek_compact$summary_presences_brin) > 0)
-  stopifnot(class(my_bek_compact) == "bek_compact")
+  stopifnot(nrow(my_flow_insights$summary_presences_brin) > 0)
+  stopifnot(class(my_flow_insights) == "flow_insights")
 
   # prepare data
-  df_plot <- prepare_brinflows(my_bek_compact = my_bek_compact,
+  df_plot <- prepare_brinflows(my_flow_insights = my_flow_insights,
                                color_brin_own = color_brin_own,
                                color_other_he = color_other_he,
                                color_brin_own_other_he = color_brin_own_other_he,

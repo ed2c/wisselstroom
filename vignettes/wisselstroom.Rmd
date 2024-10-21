@@ -90,7 +90,7 @@ path_to_file <- file.path(system.file("extdata", package = 'wisselstroom'),
 my_vlpbek_data <- read_bek_data(path_to_file)
 ```
 
-## A closer look at the `data.frame`
+## A closer look at the `my_vlpbek_data` `data.frame`
 
 
 Every row in the csv file becomes a row in the `data.frame`.  The separator in the csv file splits up the row into columns. All `r ncol(my_vlpbek_data)` columns are read in as character. The columns are given a general name (V1, V2, ..., V5), since the content can have a different meaning depending on the sub file type.  In order to gain insight in wisselstromen, we do not need all content of the bekostigingsbestanden. In the example file, this content is x-ed out. 
@@ -112,16 +112,16 @@ The first column denotes the sub file type of the row:
 
 This `data.frame` is useful if you want to see what the csv actually contains. For the use of gaining wisselstroom insights, we will not use all columns, nor all sub file types. we only need a part of these data. This is the mext step.
 
-## Making a `bek` object
+## Making a `my_flow_basics` object
 
 ```{r}
 # make the actual my_vlpbek object from the my_vlpbek_data object
-my_vlpbek <- make_flow_basics(my_vlpbek_data)
+my_flow_basics <- make_flow_basics(my_vlpbek_data)
 ```
 
-## A closer look at the `vlpbek` object
+## A closer look at the `my_flow_basics` object
 
-The `my_vlpbek` object is a list containing `r length(my_vlpbek)` elements:  
+The `my_flow_basics` object is a list containing `r length(my_flow_basics)` elements:  
 
 -  `brin_own`: the administrative number of the HEI concerned
 -  `year_funding`: the financial year in which the funding is disbursed
@@ -134,23 +134,23 @@ Compared to the original dataset, the VLP record is translated to first 3 items.
 
 All the BRD records (enrolment) are placed in its own `enrolment` `data.frame`, as are all the BRR records (degrees) in the `degrees` `data.frame`.  Only the relevant columns for wisselstroom insights are included. A column `academic_year` is added to both `data.frames`, calculated on basis of `date_enrolment` for the `enrolments`, and on `date_graduation` for the `degrees`. The column `student_id` is calculated from two original columns in the `my_vlpbek_data`.
 
-If you want to address one of the 5 items in the `my_vlpbek` object, you can do that with the `$` operator, for instance: 
+If you want to address one of the 5 items in the `my_flow_basics` object, you can do that with the `$` operator, for instance: 
 
--  `my_vlpbek$brin_own` to get a text containing the own brin
--  `my_vlpbek$enrolment` to get a `data.frame` containing the enrolment data
+-  `my_flow_basics$brin_own` to get a text containing the own brin
+-  `my_flow_basics$enrolment` to get a `data.frame` containing the enrolment data
 
 To get some summary insights, we can make a `compact_bek` object 
 
-## Making a `compact_bek` object 
+## Making a `flow_insights` object 
 
 ```{r}
-# make the actual my_vlpbek_compact object from the my_vlpbek object
-my_vlpbek_compact <- compact_bek(my_vlpbek)
+# make the actual my_vlpbek_compact object from the my_flow_basics object
+my_flow_insights <- make_flow_insights(my_flow_basics)
 ```
 
-## A closer look at the `compact_vlpbek` object 
+## A closer look at the `my_flow_insights` object 
 
-The `my_vlpbek_compact` object is a list containing `r length(my_vlpbek_compact)` elements:  
+The `my_flow_insights` object is a list containing `r length(my_flow_insights)` elements:  
 
 -  `brin_own`: the administrative number of the HEI concerned
 -  `enrolments_degrees_compact`: a `data.frame` with compact enrolment data, adorned with degree data if applicable 

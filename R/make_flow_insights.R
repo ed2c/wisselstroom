@@ -1,6 +1,6 @@
 ################################################################################
 ###
-### Makes a summary from a bek object
+### Makes insights from a flow_basics object
 ###
 ################################################################################
 
@@ -27,11 +27,11 @@ add_cols <- function(df, cols) {
 }
 
 
-#' Makes a compacter version of a bek object, with some summaries
+#' Makes insights in flows from a flow_basics oject
 #'
-#' @param my_bek a bek object
+#' @param my_flow_basics a flow_basics object
 #'
-#' @return a bek_compact_object as a list with 8 objects
+#' @return a flow_insights object as a list with 8 objects
 #' \item{type}{text containing the type of bek file the data is from}
 #' \item{brin_own}{text containing the brin of the higher educational institution to which the funding file refers to}
 #' \item{enrolments_degrees_compact}{data frame with one row per academic year, student, brin and program_code, adorned with date_degree when applicable and a note if the student has at most a single enrolment per year}
@@ -45,23 +45,23 @@ add_cols <- function(df, cols) {
 #'
 #' @examples
 #' \dontrun{
-#' bek_compact(my_bek)
+#' make_flow_insights(my_flow_basics)
 #' }
-compact_bek <- function(my_bek){
+make_flow_insights <- function(my_flow_basics){
 
   # validation of input type
-  stopifnot(class(my_bek) == "flow_basics")
+  stopifnot(class(my_flow_basics) == "flow_basics")
 
   # helpers
-  min_academic_year <- min(my_bek$enrolments$academic_year)
-  max_academic_year <- max(my_bek$enrolments$academic_year)
+  min_academic_year <- min(my_flow_basics$enrolments$academic_year)
+  max_academic_year <- max(my_flow_basics$enrolments$academic_year)
 
-  type <- my_bek$type
-  brin_own <- my_bek$brin_own
+  type <- my_flow_basics$type
+  brin_own <- my_flow_basics$brin_own
 
 
   degrees_compact <- suppressMessages(
-    my_bek$degrees |>
+    my_flow_basics$degrees |>
       dplyr::group_by(academic_year, student_id, BRIN, program_code,
                       program_level, program_phase) |>
       dplyr::summarise(date_graduation = min(date_graduation)) |>
@@ -72,7 +72,7 @@ compact_bek <- function(my_bek){
   ) |>
     add_cols( c("date_graduation_A", "date_graduation_B", "date_graduation_M", "date_graduation_D"))
 
-  enrolments_compact <- my_bek$enrolments |>
+  enrolments_compact <- my_flow_basics$enrolments |>
     # not program phase, this will make distinction between prop and main phase
     dplyr::distinct(academic_year, student_id, BRIN, program_code,
                     program_level)
@@ -100,7 +100,7 @@ compact_bek <- function(my_bek){
 
 
   presences_brin <- enrolments_compact |>
-    dplyr::mutate(brin_situation = ifelse(BRIN == my_bek$brin_own,
+    dplyr::mutate(brin_situation = ifelse(BRIN == my_flow_basics$brin_own,
                                           "brin_own",
                                           "other HE")) |>
     dplyr::distinct(academic_year, student_id, brin_situation) |>

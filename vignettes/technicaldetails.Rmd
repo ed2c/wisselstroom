@@ -35,11 +35,11 @@ path_to_file <- file.path(system.file("extdata", package = 'wisselstroom'),
 my_vlpbek_data <- read_bek_data(path_to_file)
 
 # make the my_vlpbek object from the my_vlpbek_data object
-my_vlpbek <- make_flow_basics(my_vlpbek_data)
+my_flow_basics <- make_flow_basics(my_vlpbek_data)
 
 
-# make the my_vlpbek_compact object from the my_vlpbek object
-my_vlpbek_compact <- compact_bek(my_vlpbek)
+# make the my_vlpbek_compact object from the my_low_basics object
+my_flow_insights <- make_flow_insights(my_flow_basics)
 ```
 
 # A closer look at the objects
@@ -62,17 +62,17 @@ Have a look at the structure of the read-in example data:
 str(my_vlpbek_data)
 ```
 
-## bek object as made with `bek()`
+## flow_basics object as made with `make_flow_basics()`
 
 ```{r, eval = FALSE}
-# make the actual my_vlpbek object from the my_vlpbek_data object
-my_vlpbek <- bek(my_vlpbek_data)
+# make the actual my_flow_basics object from the my_vlpbek_data object
+my_flow_basics <- make_flow_basics(my_vlpbek_data)
 ```
 
-Have a look at the structure of the newly made `my_vlpbek` object:   
+Have a look at the structure of the newly made `my_flow_basics` object:   
 
 ```{r}
-str(my_vlpbek)
+str(my_flow_basics)
 ```
 
 Compared to the original dataset, the VLP record is translated to first 3 items. The rows containing the SLR record (totals per record type) and the BLB records (studycareer totals per student) are ignored.  
@@ -86,17 +86,17 @@ The column `student_id` is calculated from two original columns in the `my_vlpbe
 -  if `V2` does not have a value, student_id becomes V3, with prefix "e" for educational number
 
 
-## vlpbek_compact object as made with `compact_bek()`
+## flow_insights object as made with `make_flow_insights()`
 
 ```{r, eval=FALSE}
-# make the my_vlpbek_compact object from the my_vlpbek object
-my_vlpbek_compact <- compact_bek(my_vlpbek)
+# make the my_flow_insights object from the my_flow_basics object
+my_flow_insights <- make_flow_insights(my_flow_basics)
 ```
 
 
-Have a look at the structure of `my_vlpbek` object:   
+Have a look at the structure of `my_flow_insights` object:   
 
 ```{r}
-str(my_vlpbek)
+str(my_flow_insights)
 ```
 
