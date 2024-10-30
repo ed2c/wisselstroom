@@ -25,7 +25,7 @@ prepare_brinflows <- function(my_flow_insights,
   label_brin_own_other_he <- paste(label_brin_own, label_other_he, sep = " & ")
 
   # basis data
-  brinflows_basis <- my_flow_insights$summary_presences_brin
+  brinflows_basis <- my_flow_insights$summary_situations_brin
 
   # plot data
   plot_data_basis <- brinflows_basis |>

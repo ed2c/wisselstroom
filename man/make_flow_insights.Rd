@@ -10,15 +10,13 @@ make_flow_insights(my_flow_basics)
 \item{my_flow_basics}{a flow_basics object}
 }
 \value{
-a flow_insights object as a list with 8 objects
+a flow_insights object as a list with 6 objects
 \item{type}{text containing the type of bek file the data is from}
 \item{brin_own}{text containing the brin of the higher educational institution to which the funding file refers to}
 \item{enrolments_degrees_compact}{data frame with one row per academic year, student, brin and program_code, adorned with date_degree when applicable and a note if the student has at most a single enrolment per year}
-\item{presences_brin}{dataframe with one row per student per academic year displaying enrolmentinformation regarding brin: either in brin_own and/or other HE, or outside HE }
-\item{presences_level}{dataframe with one row per student per academic year displaying enrolmentinformation regarding level: HBO-AD, HBO-BA, HBO-MA, WO-BA, WO-MA }
 \item{switches}{dataframe with columns from_brin, from_program_code, to_brin_to_program_code, n_students for all students in df enrolment_degrees_compact, that have at most one enrolment per year, and did not receive a diploma in first year}
-\item{summary_presences_brin}{presences_brin per academic year summarised over students}
-\item{summary_presences_level}{presences_leveln per academic year summarised over students}
+\item{summary_situations_brin}{situations_brin per academic year summarised over students}
+\item{summary_situations_level}{situations_level per academic year summarised over students}
 }
 \description{
 Makes insights in flows from a flow_basics oject

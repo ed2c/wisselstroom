@@ -14,7 +14,8 @@ utils::globalVariables(c("program_level", "program_phase", "n_enrol",
                          "from_BRIN", "to_BRIN",
                          "from_program_code", "to_program_code",
                          "n_students",
-                         "academic_year", "BRIN", "program_code","brin_situation"
+                         "academic_year", "BRIN", "program_code",
+                         "situation_brin", "situations_brin", "situations_level"
 ))
 
 # helper function that adds a column if it does not yet exists
@@ -31,15 +32,13 @@ add_cols <- function(df, cols) {
 #'
 #' @param my_flow_basics a flow_basics object
 #'
-#' @return a flow_insights object as a list with 8 objects
+#' @return a flow_insights object as a list with 6 objects
 #' \item{type}{text containing the type of bek file the data is from}
 #' \item{brin_own}{text containing the brin of the higher educational institution to which the funding file refers to}
 #' \item{enrolments_degrees_compact}{data frame with one row per academic year, student, brin and program_code, adorned with date_degree when applicable and a note if the student has at most a single enrolment per year}
-#' \item{presences_brin}{dataframe with one row per student per academic year displaying enrolmentinformation regarding brin: either in brin_own and/or other HE, or outside HE }
-#' \item{presences_level}{dataframe with one row per student per academic year displaying enrolmentinformation regarding level: HBO-AD, HBO-BA, HBO-MA, WO-BA, WO-MA }
 #' \item{switches}{dataframe with columns from_brin, from_program_code, to_brin_to_program_code, n_students for all students in df enrolment_degrees_compact, that have at most one enrolment per year, and did not receive a diploma in first year}
-#' \item{summary_presences_brin}{presences_brin per academic year summarised over students}
-#' \item{summary_presences_level}{presences_leveln per academic year summarised over students}
+#' \item{summary_situations_brin}{situations_brin per academic year summarised over students}
+#' \item{summary_situations_level}{situations_level per academic year summarised over students}
 #'
 #' @export
 #'
@@ -98,45 +97,26 @@ make_flow_insights <- function(my_flow_basics){
                      by = dplyr::join_by(academic_year, student_id, BRIN, program_code, program_level)) |>
     #  adds enrolmentype of student: single: max 1 per year
     dplyr::left_join(enrolment_types,
-                     by = dplyr::join_by(student_id))
-
-
-
-
-  presences_brin <- enrolments_compact |>
-    dplyr::mutate(brin_situation = ifelse(BRIN == my_flow_basics$brin_own,
+                     by = dplyr::join_by(student_id)) |>
+    # add sit_degree, NA when no degree
+    dplyr::mutate(situation_degree = dplyr::case_when(!is.na(date_graduation_M) ~ "M",
+                                                      !is.na(date_graduation_A) ~ "A",
+                                                      !is.na(date_graduation_D) & !is.na(date_graduation_B) ~ "DB",
+                                                      !is.na(date_graduation_D) ~ "D",
+                                                      !is.na(date_graduation_B) ~ "B")) |>
+    # add sits_brin and sits_level, per student/year, looking at all the enrolments for the student in that year
+    dplyr::mutate(situation_brin = ifelse(BRIN == my_flow_basics$brin_own,
                                           "brin_own",
                                           "other HE")) |>
-    dplyr::distinct(academic_year, student_id, brin_situation) |>
-    # to have "brin_own" before "other HE"
-    dplyr::arrange(brin_situation) |>
-    dplyr::group_by(student_id, academic_year) |>
-    # alternative calc
-    dplyr::summarise(brinsit = paste(brin_situation, collapse = " & "),
-                     # to drop the grouping AND prevent messages from showing
-                     .groups = "drop") |>
+    dplyr::group_by(academic_year, student_id) |>
+    dplyr::mutate(situations_brin = paste(sort(unique(situation_brin)),
+                                          collapse = " & ")) |>
+    dplyr::mutate(situations_level = paste(sort(unique(program_level)),
+                                           collapse = " & ")) |>
+    dplyr::ungroup()
 
-    tidyr::pivot_wider(names_from = academic_year,
-                       names_prefix = "brin_situation_",
-                       values_from = brinsit,
-                       values_fill = "outside HE",
-                       # to have the new columns in alphabetical order
-                       names_sort = TRUE)
 
-  presences_level <- enrolments_compact |>
-    dplyr::distinct(academic_year, student_id, program_level) |>
-    dplyr::group_by(student_id, academic_year) |>
-    dplyr::arrange(program_level) |>
-    # alternative calc
-    dplyr::summarise(levelsit = paste(program_level, collapse = " & "),
-                     # to drop the grouping AND prevent messages from showing
-                     .groups = "drop") |>
-    tidyr::pivot_wider(names_from = academic_year,
-                       names_prefix = "level_situation_",
-                       values_from = levelsit,
-                       values_fill = "outside HE",
-                       # to have the new columns in alphabetical order
-                       names_sort = TRUE)
+
 
   single_enrolments_without_degree <- enrolments_degrees_compact |>
     dplyr::filter(enrolment_type == "single") |>
@@ -172,22 +152,35 @@ make_flow_insights <- function(my_flow_basics){
                       from_program_code == to_program_code)) |>
     dplyr::arrange(dplyr::desc(n_students))
 
-  summary_presences_brin <- dplyr::count(presences_brin,
-                                         presences_brin[,2:3],
-                                         name = "n_students")
-  summary_presences_level <- dplyr::count(presences_level,
-                                          presences_level[,2:3],
-                                          name = "n_students")
+
+  summary_situations_brin <- enrolments_degrees_compact |>
+    dplyr::distinct(academic_year, student_id, situations_brin) |>
+    tidyr::pivot_wider(names_from = academic_year,
+                       names_prefix = "situation_brin_",
+                       values_from = situations_brin,
+                       values_fill = "outside HE") |>
+    dplyr::select(-student_id) |>
+    dplyr::count(dplyr::across(.cols = 1:2),
+                 name = "n_students")
+
+
+  summary_situations_level <- enrolments_degrees_compact |>
+    dplyr::distinct(academic_year, student_id, situations_level) |>
+    tidyr::pivot_wider(names_from = academic_year,
+                       names_prefix = "situation_level_",
+                       values_from = situations_level,
+                       values_fill = "outside HE") |>
+    dplyr::select(-student_id) |>
+    dplyr::count(dplyr::across(.cols = 1:2),
+                 name = "n_students")
 
   #return
   value <- list(type = type,
                 brin_own = brin_own,
                 enrolments_degrees_compact = enrolments_degrees_compact,
-                presences_brin = presences_brin,
-                presences_level = presences_level,
                 switches = switches,
-                summary_presences_brin = summary_presences_brin,
-                summary_presences_level = summary_presences_level
+                summary_situations_brin = summary_situations_brin,
+                summary_situations_level = summary_situations_level
   )
   class(value) <- "flow_insights"
   value
