@@ -15,7 +15,8 @@ utils::globalVariables(c("program_level", "program_phase", "n_enrol",
                          "from_program_code", "to_program_code",
                          "n_students",
                          "academic_year", "BRIN", "program_code",
-                         "situation_brin", "situations_brin", "situations_level"
+                         "situation_brin", "situations_brin",
+                         "situations_level", "enrolment"
 ))
 
 # helper function that adds a column if it does not yet exists
@@ -98,6 +99,7 @@ make_flow_insights <- function(my_flow_basics){
     #  adds enrolmentype of student: single: max 1 per year
     dplyr::left_join(enrolment_types,
                      by = dplyr::join_by(student_id)) |>
+    dplyr::mutate(enrolment = paste(program_level, BRIN, program_code, sep = "-")) |>
     # add sit_degree, NA when no degree
     dplyr::mutate(situation_degree = dplyr::case_when(!is.na(date_graduation_M) ~ "M",
                                                       !is.na(date_graduation_A) ~ "A",
@@ -113,6 +115,8 @@ make_flow_insights <- function(my_flow_basics){
                                           collapse = " & ")) |>
     dplyr::mutate(situations_level = paste(sort(unique(program_level)),
                                            collapse = " & ")) |>
+    dplyr::mutate(n_enrolments = dplyr::n()) |>
+    dplyr::mutate(all_enrolments = paste(enrolment, collapse = " | ")) |>
     dplyr::ungroup()
 
 
