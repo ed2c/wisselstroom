@@ -6,7 +6,7 @@
 
 # to suppres the "no visible binding for global variable" ----------------------
 utils::globalVariables(c("program_level", "program_phase", "n_enrol",
-                         "enrolment_type", "brinsit", "levelsit",
+                         "enrolment_type",
                          "date_graduation_D","date_graduation_B",
                          "date_graduation_A","date_graduation_M",
                          "BRIN.x", "program_code.x",
@@ -16,7 +16,8 @@ utils::globalVariables(c("program_level", "program_phase", "n_enrol",
                          "n_students",
                          "academic_year", "BRIN", "program_code",
                          "situation_brin", "situations_brin",
-                         "situations_level", "enrolment"
+                         "situations_level", "enrolment",
+                         "situation_degree", "situations_degree"
 ))
 
 # helper function that adds a column if it does not yet exists
@@ -114,6 +115,8 @@ make_flow_insights <- function(my_flow_basics){
     dplyr::mutate(situations_brin = paste(sort(unique(situation_brin)),
                                           collapse = " & ")) |>
     dplyr::mutate(situations_level = paste(sort(unique(program_level)),
+                                           collapse = " & ")) |>
+    dplyr::mutate(situations_degree = paste(sort(unique(situation_degree)),
                                            collapse = " & ")) |>
     dplyr::mutate(n_enrolments = dplyr::n()) |>
     dplyr::mutate(all_enrolments = paste(enrolment, collapse = " | ")) |>
