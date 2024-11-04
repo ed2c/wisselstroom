@@ -156,6 +156,9 @@ make_flow_insights <- function(my_flow_basics){
                                         final_degree)) |>
     dplyr::group_by(student_id) |>
     # columns specially for minyear enrolments, to determine flow_to
+    dplyr::mutate(n_final_degrees_minyear = ifelse(academic_year == min_academic_year,
+                                                   sum(final_degree),
+                                                   NA)) |>
     dplyr::mutate(all_enrolments_maxyear = ifelse(academic_year == min_academic_year,
                                                   unique(all_enrolments[academic_year == max_academic_year]),
                                                   NA)) |>
@@ -165,9 +168,10 @@ make_flow_insights <- function(my_flow_basics){
     dplyr::mutate(n_enrolments_maxyear = ifelse(is.na(n_enrolments_maxyear),
                                                 0,
                                                 n_enrolments_maxyear)) |>
-    dplyr::mutate(n_final_degrees_minyear = ifelse(academic_year == min_academic_year,
-                                                   sum(final_degree),
-                                                   NA)) |>
+    dplyr::mutate(situations_brin_maxyear = dplyr::case_when(
+      academic_year == min_academic_year & n_enrolments_maxyear == 0 ~ "outside HE",
+      academic_year == min_academic_year & n_enrolments_maxyear > 0 ~  situations_brin[academic_year == max_academic_year][1])
+    )|>
     dplyr::ungroup() |>
     dplyr::mutate(suffix = ifelse(academic_year == min_academic_year,
                                   paste("(", n_enrolments, "_",n_enrolments_maxyear,")", sep = ""),
@@ -186,6 +190,7 @@ make_flow_insights <- function(my_flow_basics){
     dplyr::mutate(any_final_degrees_minyear = dplyr::case_when(academic_year == min_academic_year & n_final_degrees_minyear >=1 ~ TRUE,
                                                                academic_year == min_academic_year & n_final_degrees_minyear == 0 ~ FALSE,
                                                                TRUE ~ NA)) |>
+
     # are all enrolments of the student next year new?
     dplyr::rowwise() |>
     dplyr::mutate(all_new_nextyear = all_new_enrolments_nextyear(all_enrolments, all_enrolments_maxyear)) |>
