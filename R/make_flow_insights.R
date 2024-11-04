@@ -17,7 +17,11 @@ utils::globalVariables(c("program_level", "program_phase", "n_enrol",
                          "academic_year", "BRIN", "program_code",
                          "situation_brin", "situations_brin",
                          "situations_level", "enrolment",
-                         "situation_degree", "situations_degree"
+                         "situation_degree", "situations_degree",
+                         "all_enrolments", "all_enrolments_maxyear",
+                         "final_degree", "n_enrolments",
+                         "n_enrolments_maxyear"
+
 ))
 
 # helper function that adds a column if it does not yet exists
@@ -28,6 +32,30 @@ add_cols <- function(df, cols) {
   if(length(add) != 0) df[add] <- NA
   return(df)
 }
+
+# helper functions used in enrolment_degree_compact calculation
+
+all_new_enrolments_nextyear <- function(enrolments_thisyear, enrolments_nextyear){
+  old_enrolments <- stringr::str_split_1(enrolments_thisyear,
+                                         pattern = " | ")
+  old_enrolments <- old_enrolments[nchar(old_enrolments)>1]
+  old_enrolments
+  # all old enrolments must not be in enrolments_nextyear
+  !any(stringr::str_detect(enrolments_nextyear, old_enrolments))
+}
+
+any_new_enrolments_nextyear <- function(enrolments_thisyear, enrolments_nextyear){
+  if (is.na(enrolments_nextyear)) {
+    return(NA)
+  }
+  new_enrolments <- stringr::str_split_1(enrolments_nextyear,
+                                         pattern = " | ")
+  new_enrolments <- new_enrolments[nchar(new_enrolments)>1]
+  any(stringr::str_detect(enrolments_thisyear, new_enrolments, negate = TRUE))
+}
+
+
+
 
 
 #' Makes insights in flows from a flow_basics oject
@@ -117,12 +145,64 @@ make_flow_insights <- function(my_flow_basics){
     dplyr::mutate(situations_level = paste(sort(unique(program_level)),
                                            collapse = " & ")) |>
     dplyr::mutate(situations_degree = paste(sort(unique(situation_degree)),
-                                           collapse = " & ")) |>
+                                            collapse = " & ")) |>
     dplyr::mutate(n_enrolments = dplyr::n()) |>
     dplyr::mutate(all_enrolments = paste(enrolment, collapse = " | ")) |>
-    dplyr::ungroup()
-
-
+    dplyr::ungroup() |>
+    # for maxyear degrees are not complete
+    dplyr::mutate(final_degree = situation_degree %in% c("A", "B","M", "DB"),
+                  final_degree = ifelse(is.na(final_degree),
+                                        FALSE,
+                                        final_degree)) |>
+    dplyr::group_by(student_id) |>
+    # columns specially for minyear enrolments, to determine flow_to
+    dplyr::mutate(all_enrolments_maxyear = ifelse(academic_year == min_academic_year,
+                                                  unique(all_enrolments[academic_year == max_academic_year]),
+                                                  NA)) |>
+    dplyr::mutate(n_enrolments_maxyear = ifelse(academic_year == min_academic_year,
+                                                unique(n_enrolments[academic_year == max_academic_year]),
+                                                NA)) |>
+    dplyr::mutate(n_enrolments_maxyear = ifelse(is.na(n_enrolments_maxyear),
+                                                0,
+                                                n_enrolments_maxyear)) |>
+    dplyr::mutate(n_final_degrees_minyear = ifelse(academic_year == min_academic_year,
+                                                   sum(final_degree),
+                                                   NA)) |>
+    dplyr::ungroup() |>
+    dplyr::mutate(suffix = ifelse(academic_year == min_academic_year,
+                                  paste("(", n_enrolments, "_",n_enrolments_maxyear,")", sep = ""),
+                                  NA)) |>
+    dplyr::mutate(enrolment_stays = dplyr::case_when(academic_year == min_academic_year & is.na(all_enrolments_maxyear) ~ FALSE,
+                                                     academic_year == min_academic_year ~ stringr::str_detect(all_enrolments_maxyear, pattern = enrolment),
+                                                     academic_year == max_academic_year ~ NA)) |>
+    dplyr::mutate(student_stays = dplyr::case_when(academic_year == min_academic_year & !is.na(all_enrolments_maxyear) ~ TRUE,
+                                                   academic_year == min_academic_year & is.na(all_enrolments_maxyear) ~ FALSE,
+                                                   academic_year == max_academic_year ~ NA)) |>
+    # all enrolments in minyear end in final degree
+    dplyr::mutate(all_final_degrees_minyear = dplyr::case_when(academic_year == min_academic_year & n_enrolments == n_final_degrees_minyear ~ TRUE,
+                                                               academic_year == min_academic_year & n_enrolments != n_final_degrees_minyear ~ FALSE,
+                                                               TRUE ~ NA)) |>
+    # any enrolments in minyear end in final degree
+    dplyr::mutate(any_final_degrees_minyear = dplyr::case_when(academic_year == min_academic_year & n_final_degrees_minyear >=1 ~ TRUE,
+                                                               academic_year == min_academic_year & n_final_degrees_minyear == 0 ~ FALSE,
+                                                               TRUE ~ NA)) |>
+    # are all enrolments of the student next year new?
+    dplyr::rowwise() |>
+    dplyr::mutate(all_new_nextyear = all_new_enrolments_nextyear(all_enrolments, all_enrolments_maxyear)) |>
+    dplyr::mutate(any_new_nextyear = any_new_enrolments_nextyear(all_enrolments, all_enrolments_maxyear)) |>
+    dplyr::ungroup() |>
+    # start flow calculation
+    dplyr::mutate(flow_to = dplyr::case_when(
+      academic_year == min_academic_year & enrolment_stays ~ "stay",
+      academic_year == min_academic_year & n_enrolments_maxyear == 0 ~ "stop",
+      academic_year == min_academic_year & all_final_degrees_minyear & all_new_nextyear ~ "stack",
+      academic_year == min_academic_year & all_final_degrees_minyear & !all_new_nextyear ~ "special",
+      academic_year == min_academic_year & any_final_degrees_minyear ~ "special",
+      academic_year == min_academic_year & all_new_nextyear ~ "switch",
+      academic_year == min_academic_year & !any_new_nextyear ~ "stop",
+      academic_year == min_academic_year  ~ "special",
+      TRUE ~ NA
+    ))
 
 
   single_enrolments_without_degree <- enrolments_degrees_compact |>
