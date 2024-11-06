@@ -18,13 +18,13 @@ utils::globalVariables(c("brin_from",
 #' Gives insight in enrolments year after degree
 #'
 #' @param program_of_interest string containing the 5-character program code of interest
-#' @param my_bek_compact a bek_compact object
+#' @param my_flow_insights a flow_insights object
 #' @param prop_exam boolean, default FALSE, set to TRUE for after propedeutic exam
 #'
 #' @return a list with 10 objects
 #' \item{program_of_interest}{the program code that was entered}
 #' \item{degree}{D for propedeutic, A for AD, B for Bachelor or M for Master}
-#' \item{brin_own}{brin_own from the my_bek_compact object}
+#' \item{brin_own}{brin_own from the my_flow_insights object}
 #' \item{academic_year_from}{the earliest academic year in the data}
 #' \item{academic_year_to}{the latest academic year in the data}
 #' \item{n_students}{number of students with a degree from brin_own/program_of_interest in academic_year_from}
@@ -37,16 +37,16 @@ utils::globalVariables(c("brin_from",
 #' @examples
 #' \dontrun{
 #' after_degree(program_of_interest = "34507",
-#'  my_bek_compact = my_compact_thing,
+#'  my_flow_insights = my_insights_object,
 #'   prop_exam = TRUE)
 #' }
-after_degree <- function(program_of_interest, my_bek_compact, prop_exam = FALSE){
+after_degree <- function(program_of_interest, my_flow_insights, prop_exam = FALSE){
 
   # input checks
   stopifnot(class(program_of_interest) == "character")
   stopifnot(nchar(program_of_interest) == 5)
   stopifnot(as.integer(program_of_interest) > 0)
-  stopifnot(class(my_bek_compact) == "bek_compact")
+  stopifnot(class(my_flow_insights) == "flow_insights")
   stopifnot(class(prop_exam) == "logical")
   stopifnot((prop_exam & (substr(program_of_interest,1,1) == "3")) | !prop_exam)
 
@@ -57,12 +57,12 @@ after_degree <- function(program_of_interest, my_bek_compact, prop_exam = FALSE)
                              substr(program_of_interest,1,1) == "6" ~ "M",
                              substr(program_of_interest,1,1) == "8" ~ "A")
 
-  min_academic_year <- min(my_bek_compact$enrolments_degrees_compact$academic_year)
-  max_academic_year <- max(my_bek_compact$enrolments_degrees_compact$academic_year)
-  brin_own <- my_bek_compact$brin_own
+  min_academic_year <- min(my_flow_insights$enrolments_degrees_compact$academic_year)
+  max_academic_year <- max(my_flow_insights$enrolments_degrees_compact$academic_year)
+  brin_own <- my_flow_insights$brin_own
 
   # find all students with an enrolment on this program at brin_own with a P
-  students_of_interest <- my_bek_compact$enrolments_degrees_compact |>
+  students_of_interest <- my_flow_insights$enrolments_degrees_compact |>
     dplyr::mutate(date_degree = dplyr::case_when(program_level == "HBO-BA" & prop_exam ~ date_graduation_D,
                                                  program_level == "HBO-BA"  ~ date_graduation_B,
                                                  program_level == "WO-BA"  ~ date_graduation_B,
@@ -84,7 +84,7 @@ after_degree <- function(program_of_interest, my_bek_compact, prop_exam = FALSE)
 
   # find ALL enrolments for these students
   enrolments_of_interest <- students_of_interest |>
-    dplyr::left_join(my_bek_compact$enrolments_degrees_compact,
+    dplyr::left_join(my_flow_insights$enrolments_degrees_compact,
                      by = dplyr::join_by(student_id,  enrolment_type))
 
   enrol_from <- enrolments_of_interest |>
