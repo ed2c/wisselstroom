@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 
-Each year students start a study programme in institutions of higher education. In the academic year 2023/2024 126059 students started a programme at a university of applied sciences in the Netherlands where they did not study before^[https://www.vereniginghogescholen.nl/kennisbank/feiten-en-cijfers/artikelen/dashboard-instroom-inschrijvingen-en-diploma-s]. These students are not all new in higher education. About 15% of them were previously enrolled in another institution. And of course there are students switching programmes within and between research universities and universities of applied sciences.
+Each year students start a study programme in institutions of higher education. In the academic year 2023/2024 126059 students started a programme at a university of applied sciences in the Netherlands where they did not study before^[https://www.vereniginghogescholen.nl/kennisbank/feiten-en-cijfers/artikelen/dashboard-instroom-inschrijvingen-en-diploma-s]. These students are not all new in higher education. About 15% of them were previously enrolled in another institution. Switching institutions includes switching between research universities and universities of applied sciences. And of course next to students switching institutions, there are students switching programmes within their institutions.  
 
 With help of the package `wisselstroom` we can gain insight in the flows from and to our own (dutch) institution of higher education. It makes use of the institution specific files relating to the funding of the enrolments, the "bekostigingsbestanden".  
 
@@ -43,10 +43,10 @@ A  bekostigingsbestand can be requested containing information about maximum two
 
 ## How to obtain the bekostigingsbestanden
 
-TDB
+Each institution has its own procedures.  
 
 
-## Technical specifications
+## Technical specifications bekostigingsbestand
 
 -  The name of a bekostigingsbestand is relevant information. So do not alter this. The package `wisselstroom` contains an example bekostigingsbestand: "VLPBEK_2025_20240115_99XX.csv". 
     -  VLPBEK tells us it is a voorlopig bekostigingsbestand (a preliminary file). Other options for the first 5 characters are DEFBEK (definitive file) or HISBEK (historical file)
@@ -66,101 +66,60 @@ knitr::include_graphics("bronbestand.png")
 
 
 
-# Working with a bekostigingsbestand
+# Functions in the package
+
+The package `wisselstroom` contains three main functions: 
+
+-  `read_bek_data()`, for reading in a defbek or vlpbek type of bekostigingsbestand, results in a `data.frame`;
+-  `make_flow_basics()`, for splitting up that `data.frame`, and restricting to data necessary for;
+-  `make_flow_insights()`, for calculations that help gain the insights.
+
+Besides these three functions, there are some smaller functions:
+
+-  `plot_brinflows()`, to gain insight in flows to and from the own institution, on an aggregated level;
+-  `after_degree()`, to gain insight in specific flows after obtaining a final or propedeutical degree.
+
+There is one helper function that does not need information from a bekostigingsbestand:  
+ 
+-  `plot_sankeygradient()`, to plot a sankey diagram with colors of the flows changing gradually from origin to destination
+
+# Flow descriptions
+
+Every enrolment gets labelled with either **stay**, **switch**, **stack**, **stop**, **start** or **special**,depending on the enrolments of that student in both academic years of the bekostigingsbestand.  
+
+Seeing from the first academic year, the enrolments are proceeding to the following year as:
+
+-  **stay** - an enrolment that is present in both years
+-  **switch** - an enrolment that stops after the academic year without a final degree, and the student starts the following academic year in a program the student was not enrolled before
+-  **stack** - an enrolment that ends in a final degree, as are the other enrolments of the student, and the student starts the following academic year in a program the student was not enrolled before
+-  **stop** - all enrolments stop
+-  **special** - some special cases, with multiple enrolments per student per academic year
+
+Seeing from the last academic year, an enrolment can be: 
+
+-  **start** - an enrolment that was not present in the first academic year, that was not a stack or switch
 
 
-## Reading into a basic `data.frame`
 
-A first step to work with a bekostigingsbestand, is to read it in an R `data.frame`:  
+# Quick start  
 
-```{r setup}
-library(wisselstroom)
-```
-
-When reading the data, some checks are made on the filename. So be sure to have the original filename.  
-
-```{r}
-# This is the path to the example file.
-# To read in your institution specific bekostigingsbestand, 
-# change path_to_file accordingly.
-path_to_file <- file.path(system.file("extdata", package = 'wisselstroom'),
-                           "VLPBEK_2025_20240115_99XX.csv")
-
-# read the data and place it in an R data.frame
-my_vlpbek_data <- read_bek_data(path_to_file)
-```
-
-## A closer look at the `my_vlpbek_data` `data.frame`
-
-
-Every row in the csv file becomes a row in the `data.frame`.  The separator in the csv file splits up the row into columns. All `r ncol(my_vlpbek_data)` columns are read in as character. The columns are given a general name (V1, V2, ..., V5), since the content can have a different meaning depending on the sub file type.  In order to gain insight in wisselstromen, we do not need all content of the bekostigingsbestanden. In the example file, this content is x-ed out. 
-
-
-The first 10 rows and 9 columns:  
-
-```{r}
-my_vlpbek_data[1:10,1:9]
-```
-
-The first column denotes the sub file type of the row:  
-
--  the first row and only this row, is a "VLP" (voorlooprecord) with metadata
--  "BLB" records (bekostigingsloopbaan student) are metadata regarding a student's study career in HE 
--  "BRD" records (bekostigingsresultaat deelname), details about a specific enrolment of a student
--  "BRR" records (bekostigingsresultaat resultaat), details about a specific obtained degree of a student
--  the last row and only this row, is a "SLR" (sluitrecord) containing the number of BLB, BRD and BRR rows
-
-This `data.frame` is useful if you want to see what the csv actually contains. For the use of gaining wisselstroom insights, we will not use all columns, nor all sub file types. we only need a part of these data. This is the mext step.
-
-## Making a `my_flow_basics` object
+After installing the package `wisselstroom`, and loading it, running the following lines will give you a quick insight in the flows regarding switch (change the path if you want to use your own bekostingsbestand):    
 
 ```{r}
-# make the actual my_vlpbek object from the my_vlpbek_data object
-my_flow_basics <- make_flow_basics(my_vlpbek_data)
-```
-
-## A closer look at the `my_flow_basics` object
-
-The `my_flow_basics` object is a list containing `r length(my_flow_basics)` elements:  
-
--  `brin_own`: the administrative number of the HEI concerned
--  `year_funding`: the financial year in which the funding is disbursed
--  `date_retrieval`: the date the original bekostigingsbestand is made
--  `enrolments`: a `data.frame` containing enrolment data
--  `degrees`: a `data.frame` containing data on obtained degrees
-
-
-Compared to the original dataset, the VLP record is translated to first 3 items. The rows containing the SLR record (totals per record type) and the BLB records (studycareer totals per student) are ignored.  
-
-All the BRD records (enrolment) are placed in its own `enrolment` `data.frame`, as are all the BRR records (degrees) in the `degrees` `data.frame`.  Only the relevant columns for wisselstroom insights are included. A column `academic_year` is added to both `data.frames`, calculated on basis of `date_enrolment` for the `enrolments`, and on `date_graduation` for the `degrees`. The column `student_id` is calculated from two original columns in the `my_vlpbek_data`.
-
-If you want to address one of the 5 items in the `my_flow_basics` object, you can do that with the `$` operator, for instance: 
-
--  `my_flow_basics$brin_own` to get a text containing the own brin
--  `my_flow_basics$enrolment` to get a `data.frame` containing the enrolment data
-
-To get some summary insights, we can make a `compact_bek` object 
-
-## Making a `flow_insights` object 
-
-```{r}
-# make the actual my_vlpbek_compact object from the my_flow_basics object
+# load the library
+# specify the path to your data, here is the example data
+path_to_mybekfile <- system.file("extdata", "VLPBEK_2025_20240115_99XX.csv", package = "wisselstroom")
+# read in the data to a data.frame
+vlp_data <- read_bek_data(path_to_mybekfile)
+# make the basics
+my_flow_basics <- make_flow_basics(vlp_data)
+# make the insights
 my_flow_insights <- make_flow_insights(my_flow_basics)
+# have a look at the switches
+my_flow_insights$switches
 ```
 
-## A closer look at the `my_flow_insights` object 
+# Technical details
 
-The `my_flow_insights` object is a list containing `r length(my_flow_insights)` elements:  
-
--  `brin_own`: the administrative number of the HEI concerned
--  `enrolments_degrees_compact`: a `data.frame` with compact enrolment data, adorned with degree data if applicable 
--  `presences_brin`: a `data.frame` with summary data per student regarding enrolment in brins
--  `presences_level`: a `data.frame` with summary data per student regarding enrolment in levels
--  `switches`: a `data.frame` containing data on switches (from a program without a degree to another program)
--  `summary_presences_brin`: presences_brin per academic year summarised over students
--  `summary_presences_level`: presences_level per academic year summarised over students
-
-
-
-
+For more information regarding the calculations, read the vignette "Technical  details".  
 
