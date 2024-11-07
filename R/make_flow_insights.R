@@ -23,7 +23,8 @@ utils::globalVariables(c("program_level", "program_phase", "n_enrol",
                          "n_enrolments_otheryear",
                          "all_enrolments_otheryear", "flow_to", "from_brin",
                          "from_program", "n", "n_enrolments_otheryear",
-                         "total_switch", "with_prop"
+                         "total_switch", "with_prop",
+                         "flow", "flow_direction", "flow_from"
 
 ))
 
@@ -222,11 +223,19 @@ make_flow_insights <- function(my_flow_basics){
       academic_year == max_academic_year & !any_new_otheryear ~ "start",
       academic_year == max_academic_year  ~ "special",
       TRUE ~ NA
-    ))
+    )) |>
+    dplyr::mutate(flow = dplyr::case_when(academic_year == min_academic_year ~ flow_to,
+                                          academic_year == max_academic_year ~ flow_from,
+                                          TRUE ~ NA)) |>
+    dplyr::mutate(flow_direction = dplyr::case_when(academic_year == min_academic_year ~ "flow_to",
+                                                   academic_year == max_academic_year ~ "flow_from",
+                                                   TRUE ~ NA)) |>
+    dplyr::select(-flow_to, - flow_from)
 
   switches <- enrolments_degrees_compact |>
     dplyr::filter(academic_year == min_academic_year,
-                  flow_to == "switch") |>
+                  flow == "switch",
+                  flow_direction == "flow_to") |>
     dplyr::count(from_brin = BRIN,
                  from_program = program_code,
                  all_enrolments_otheryear,
