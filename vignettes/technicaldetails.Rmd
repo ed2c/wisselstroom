@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 
-In this article you can read about the calculations made to obtain the `wisselstroom` objects.
+In this article you can read about the objects and calculations made in the functions of `wisselstroom`
 
 # Setup
 
@@ -23,80 +23,269 @@ In this article you can read about the calculations made to obtain the `wisselst
 library(wisselstroom)
 ```
 
-```{r}
-# making the objects
 
+# Reading in data with `read_bek_data()`
+
+A bekostigingsbestand can be considered a container for 5 different sub files with records that are intermingled. Each sub file type has its own interpretation of the columns. The first step to work with a bekostigingsbestand, is to read it in, with help of the function `read_bek_data()`. When reading the data, some checks are made by this function on the filename. So be sure to have the original filename. And the original data.
+
+## Code to make the object
+
+The following code reads in a bekostigingsbestand: 
+
+```{r}
 # To read in your institution specific bekostigingsbestand, 
 # change path_to_file accordingly.
 path_to_file <- file.path(system.file("extdata", package = 'wisselstroom'),
-                           "VLPBEK_2025_20240115_99XX.csv")
+                          "VLPBEK_2025_20240115_99XX.csv")
 
 # read the data and place it in an R data.frame
-my_vlpbek_data <- read_bek_data(path_to_file)
-
-# make the my_vlpbek object from the my_vlpbek_data object
-my_flow_basics <- make_flow_basics(my_vlpbek_data)
-
-
-# make the my_vlpbek_compact object from the my_low_basics object
-my_flow_insights <- make_flow_insights(my_flow_basics)
+my_bek_data <- read_bek_data(path_to_file)
 ```
 
-# A closer look at the objects
 
-## Data set as read in with `read_bek_data()`
+## A closer look at the object
 
-```{r, eval=FALSE}
-my_vlpbek_data <- read_bek_data(path_to_file)
-```
-
-The first 10 rows and 9 columns:  
+The resulting object `my_bek_data`, is a `data.frame`, with an extra attribute denoting the type of read-in bekostigingsbestand: 
 
 ```{r}
-my_vlpbek_data[1:10,1:9]
+class(my_bek_data)
 ```
-
-Have a look at the structure of the read-in example data:  
 
 ```{r}
-str(my_vlpbek_data)
+attributes(my_bek_data)$comment
 ```
 
-## flow_basics object as made with `make_flow_basics()`
+Every row in the orginal csv file becomes a row in the `data.frame`.  The separator in the csv file splits up the row into columns. All `r ncol(my_bek_data)` columns are read in as character. The columns are given a general name (V1, V2, V3, ...), since the content can have a different meaning depending on the sub file type.  In order to gain insight in wisselstromen, we do not need all content of the bekostigingsbestanden. In the example file, this content is x-ed out. 
 
-```{r, eval = FALSE}
-# make the actual my_flow_basics object from the my_vlpbek_data object
-my_flow_basics <- make_flow_basics(my_vlpbek_data)
+Have a look at the first 10 rows and 9 columns:  
+  
+```{r}
+my_bek_data[1:10,1:9]
 ```
 
-Have a look at the structure of the newly made `my_flow_basics` object:   
+
+The first column denotes the sub file type of the row:  
+  
+-  the first row and only this row, is a "VLP" (voorlooprecord) with metadata
+-  "BLB" records (bekostigingsloopbaan student) are metadata regarding a student's study career in HE 
+-  "BRD" records (bekostigingsresultaat deelname), details about a specific enrolment of a student
+-  "BRR" records (bekostigingsresultaat resultaat), details about a specific obtained degree of a student
+-  the last row and only this row, is a "SLR" (sluitrecord) containing the number of BLB, BRD and BRR rows
+
+This `data.frame` is useful if you want to see what the csv actually contains. For the use of gaining wisselstroom insights, we will not use all columns, nor all sub file types. We only need a part of these data. This is the next step.
+
+
+
+# Disentangle the data with `make_flow_basics()`
+
+The previous step let to a `data.frame` where all the sub file types are still together. In this step the sub file types are separated, and the data we need for getting our insights is extracted. Some new variables are added, based on the data in the file.
+
+## Code to make the object
+
+Assuming the object `my_bek_data` is already made in the previous step, this line of code processes `my_bek_data` with help of the function `make_flow_basics()` into a `flow_basics` object: 
+
+```{r}
+# make the my_flow_basics object from the my_bek_data object
+my_flow_basics <- make_flow_basics(my_bek_data)
+```
+
+## A closer look at the object
+
+The newly made `my_flow_basics` object is of type `flow_basics`: 
+  
+```{r}
+class(my_flow_basics)
+```
+
+The structure of this object is a list containing `r length(my_flow_basics)` elements: 
 
 ```{r}
 str(my_flow_basics)
 ```
 
-Compared to the original dataset, the VLP record is translated to first 3 items. The rows containing the SLR record (totals per record type) and the BLB records (studycareer totals per student) are ignored.  
+The elements of the list:  
 
-All the BRD records (enrolment) are placed in its own `enrolment` `data.frame`, as are all the BRR records (degrees) in the `degrees` `data.frame`.  Only the relevant columns for wisselstroom insights are included. A column `academic_year` is added to both `data.frames`, calculated on basis of `date_enrolment` for the `enrolments`, and on `date_graduation` for the `degrees`. 
+-  `type`: either "VLPBEK", "DEFBEK" or "HISBEK"
+-  `brin_own`: the administrative number of the HEI concerned
+-  `date_retrieval`: the date the original bekostigingsbestand is made
+-  `enrolments`: a `data.frame` containing enrolment data
+-  `degrees`: a `data.frame` containing data on obtained degrees
 
-The column `student_id` is calculated from two original columns in the `my_vlpbek_data`, `V2` and `V3`:   
--  `V2` contains the BSN of the student
--  `V3` contains the onderwijsnummer (educationa number) of the student
--  if `V2` has a value, student_id gets that number , prefixed with a "b", short for BSN
--  if `V2` does not have a value, student_id becomes V3, with prefix "e" for educational number
+If you want to address one of the 5 items in the `my_flow_basics` object, you can do that with the `$` operator, for instance: 
+
+-  `my_flow_basics$brin_own` to get a text containing the own brin
+-  `my_flow_basics$enrolment` to get a `data.frame` containing the enrolment data
 
 
-## flow_insights object as made with `make_flow_insights()`
+### `type`, `brin_own`, `date_retrieval`
 
-```{r, eval=FALSE}
-# make the my_flow_insights object from the my_flow_basics object
+The VLP record of the original data set, is translated to these 3 items. 
+
+### `enrolments` 
+
+-  All the BRD records (enrolment) of the original data set are placed in the `enrolments` `data.frame` of the `flow_basics` object.
+-  Only the relevant columns for wisselstroom insights are included.
+-  A column `academic_year` is added calculated on basis of `date_enrolment`.
+-  A column `student_id` is calculated from two original columns in the `my_bek_data`, `V2` and `V3`:   
+    -  `V2` contains the BSN of the student
+    -  `V3` contains the onderwijsnummer (educationa number) of the student
+    -  if `V2` has a value, student_id gets that value , prefixed with a "b", short for BSN
+    -  if `V2` does not have a value, student_id gets the value of V3, with prefix "e" for educational number
+
+
+### `degrees`
+
+-  All the BRR records (degrees) of the original data set are placed in the `degree` `data.frame` of the `flow_basics` object.
+-  Only the relevant columns for wisselstroom insights are included.
+-  A column `academic_year` is added to calculated on basis of `date_graduation`.
+-  A column `student_id` is calculated from two original columns in the `my_bek_data`, `V2` and `V3`:   
+    -  `V2` contains the BSN of the student
+    -  `V3` contains the onderwijsnummer (educationa number) of the student
+    -  if `V2` has a value, student_id gets that value , prefixed with a "b", short for BSN
+    -  if `V2` does not have a value, student_id gets the value of V3, with prefix "e" for educational number
+
+
+### Remarks
+
+-  The rows containing the SLR record (totals per record type) and the BLB records (study career totals per student) are not neded for the wisselstrroom calculation, hence ignored.
+-  This functon also works for HISBEK data. it can help you browse through the data. The HISBEK data itself, is at the moment not further implemented in the package `wisselstroom`.
+
+This object is useful if you want to have an overview of the enrolments, or the degrees. For the use of gaining wisselstroom insights, we need to make a `flow_insights` object.  This is the next step.
+
+
+# Make the insights with `make_flow_insights()`
+
+The previous step led to a `flow_basics object` with disentangled data needed for flow insights. In this step the actual calculations are done. Enrolments are condensed, some new variables including degree information are added, based on the data in the file.
+The function `make_flow_insights()` will only work for a `flow_basics` object of type "VLPBEK" of "DEFBEK", not for type "HISBEK". 
+
+## Code to make the object
+
+Assuming the object `my_flow_basics` is already made in the previous step, this line of code processes `my_flow_basics` with help of the function `make_flow_insights()` into a `flow_insights` object: 
+
+```{r}
+# make the flow_insights object from the my_flow_basics object
 my_flow_insights <- make_flow_insights(my_flow_basics)
 ```
 
 
-Have a look at the structure of `my_flow_insights` object:   
+## A closer look at the object
+
+The newly made `my_flow_insights` object is of type `flow_insights`: 
+  
+```{r}
+class(my_flow_insights)
+```
+
+The structure of this object is a list containing `r length(my_flow_insights)` elements: 
 
 ```{r}
 str(my_flow_insights)
 ```
+
+The elements of the list:  
+
+-  `type`: either "VLPBEK" or "DEFBEK"
+-  `brin_own`: the administrative number of the HEI concerned
+-  `date_retrieval`: the date the original bekostigingsbestand is made
+-  `enrolments_degrees_compact`: a `data.frame` with compact enrolment data, adorned with degree data if applicable 
+-  `switches`: a `data.frame` containing data on switches (from a program without a degree to another program)
+-  `summary_presences_brin`: presences_brin per academic year summarised over students
+-  `summary_presences_level`: presences_level per academic year summarised over students
+
+
+### `type`, `brin_own`, `date_retrieval`
+
+These items are copied from the `flow_basics` object that was used as argument. 
+
+### `enrolments_degrees_compact`
+
+-  An enrolment is seen as the combination of academic year, student, program and institution.
+-  In a DEFBEK or VLPBEK, there is data from two academic years.
+-  In the enrolment data.frame in flows_basics, there can be multiple rows for a student enrolled in the same program at the same institution in the same academic year, only with different dates of enrolment or disenrolment, or program forms. In this `data.frame` these rows are condensed into one. -  Added to this starting `data.frame` the date_graduation is added, including a propedeutical degree when present. Some extra variables are added, some on enrolment level, some on student level.  
+
+Variables in `enrolments_degrees_compact`:
+
+```{r, echo = FALSE}
+variables <- c(
+  "academic_year",             "student_id",                "BRIN" ,                    
+  "program_code"        ,      "program_level"   ,          "program_form"   ,          
+  "date_enrolment"      ,      "date_disenrolment"   ,      "date_graduation_D"    ,     
+  "date_graduation_B"   ,      "date_graduation_M" ,        "date_graduation_A"  ,      
+  "enrolment_type"      ,      "enrolment"       ,          "situation_degree"   ,      
+  "situation_brin"      ,      "situations_brin"   ,        "situations_level" ,        
+  "situations_degree"   ,      "n_enrolments"      ,        "all_enrolments"   ,        
+  "final_degree"        ,      "n_final_degrees_minyear"  , "all_enrolments_otheryear" ,
+  "n_enrolments_otheryear"  ,  "situations_brin_otheryear", "suffix"         ,          
+  "enrolment_is_in_bothyears", "student_is_in_bothyears"  , "all_final_degrees_minyear",
+  "any_final_degrees_minyear" ,"all_new_otheryear"    ,     "any_new_otheryear",    
+  "flow", "flow_to")
+
+explanations <- c(
+  "academic year date_enrolment",
+  "unique identifier student" ,
+  "institution of higher education of enrolment" ,
+  "isat/croho of study program"  ,
+  "level of program, one of HBO-AD, HBO-BA, HBO-MA, WO-BA, WO-MA"   ,
+  "form of enrolment, combination of VT (full-time), DT (part-time), DU (dual)", 
+  "earliest enrolment date in this academic year for this enrolment" ,
+  "latest disenrolment date in this academic year for this enrolment" ,
+  "graduation date propedeutic exam",
+  "graduation date bachelor exam"  ,
+  "graduation date master exam"    , 
+  "graduation date associate degree exam"  , 
+  "single (when student only has one enrolment in this academic year), else multiple",
+  "combintion of program level, BRIN and program code"   ,  
+  "when awarded, the type of degree: D, B, M, A" ,  
+  "one of 'brin_own' or 'other HE'" ,
+  "combination of situation_brin over all enrolments of student in this academic year",
+  "combination of program_level over all enrolments of student in this academic year",
+  "combination of situation_degree over all enrolments of student in this academic year",
+  "number of enrolment of this student in this academic year",
+  "combination of enrolment over all enrolments of student in this academic year",
+  "TRUE if situation_degree is B, M or A, else FALSE",
+  " the number of final degrees obtained in first year",  
+  "combination of enrolment over all enrolments of student in the other academic year in the data",
+  "number of enrolment of this student in the other academic year in the data",
+  "combination of situation_brin over all enrolments of student in the other academic year in the data",
+  "(n_enrolments _ n_enrolment_otheryear)",
+  "TRUE or FALSE",
+  "TRUE or FALSE",
+  "TRUE if all enrolments of student in first year of data end in final degree",
+  "TRUE if any enrolment of student in first year of data end in final degree",
+  "TRUE if all enrolments of student in other year are not in this year" ,
+  "TRUE if any enrolment of student in other year is not in this year",
+  "one of stay, switch, start, stop, stack, special",
+  " as seen from first year in data or last year")
+
+data.frame(variables, explanations) |> knitr::kable()
+
+```
+
+### `switches`
+
+A summary in a `data.frame` of the `enrolments_degrees_compact()` which counts the switches from the first of the two academic year in the data to the second academic year. It can happen that someone switches to more than one program.  
+
+Variables in `enrolments_degrees_compact`:
+
+```{r, echo = FALSE}
+data.frame(variables = c("from_brin", "from_program", "all_enrolments_otheryear", "total_switch", "with_prop", "other"),
+           explanations = c("the brin of the enrolment that stops",
+                            "the program code of the enrolment that stops",
+                            "all enrolments in the coming year",
+                            "how often this switch is observed in the data",
+                            "and how often with a propedeutic exam",
+                            "and how often without a propedeutic exam")) |> knitr::kable()
+
+```
+
+### `summary_presences_brin` and `summary_presences_level`
+
+These small data.frames compare the situations regarding brin or level between the two academic years.  
+
+
+
+
+
+
+
 

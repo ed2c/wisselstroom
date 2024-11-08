@@ -49,13 +49,15 @@ Each institution has its own procedures.
 ## Technical specifications bekostigingsbestand
 
 -  The name of a bekostigingsbestand is relevant information. So do not alter this. The package `wisselstroom` contains an example bekostigingsbestand: "VLPBEK_2025_20240115_99XX.csv". 
-    -  VLPBEK tells us it is a voorlopig bekostigingsbestand (a preliminary file). Other options for the first 5 characters are DEFBEK (definitive file) or HISBEK (historical file)
+    -  VLPBEK tells us it is a voorlopig bekostigingsbestand (a preliminary file). Other options for the first 5 characters are DEFBEK (definitive file) or HISBEK (historical file). 
     -  2025 is the year the funding relates to
     -  20240115 is the date the file was created by DUO
     -  99XX is the BRIN of the HEI; BRIN is an abbreviation of BasisRegistratieINstellingen, an administrative code
 -  The *size* of a bekostigingsbestand depends on the HEI. For a larger university of applied sciences, and for the maximum time horizon it can be around 15MB (voorlopig bekostigingsbestand).  
 -  The file *format* is an UTF-8 coded csv, with a "|" as delimiter. 
--  The file can be considered a container for 5 different sub files with records that are intermingled. Each sub file type has its own interpretation of the columns, so in order to interpret a value in a specific column of the csv, it is needed to also know the recordtype. 
+-  The file can be considered a container for 5 different sub files with records that are intermingled. Each sub file type has its own interpretation of the columns, so in order to interpret a value in a specific column of the csv, it is needed to also know the recordtype.  
+
+Since the DEFBEK's are issued in may or june, the second year in the data does not describe the complete second year. 
 
 A screenshot of the example bekostigingsbestand:  
 
@@ -71,7 +73,7 @@ knitr::include_graphics("bronbestand.png")
 The package `wisselstroom` contains three main functions: 
 
 -  `read_bek_data()`, for reading in a defbek or vlpbek type of bekostigingsbestand, results in a `data.frame`;
--  `make_flow_basics()`, for splitting up that `data.frame`, and restricting to data necessary for;
+-  `make_flow_basics()`, for splitting up that `data.frame`, and restricting to data necessary for:
 -  `make_flow_insights()`, for calculations that help gain the insights.
 
 Besides these three functions, there are some smaller functions:
@@ -102,6 +104,13 @@ Seeing from the last academic year, an enrolment can be:
 
 
 # Quick start  
+
+Install the package `wisselstroom` when not installed yet, and load it:
+```{r}
+# devtools::install_github("ed2c/wisselstroom"), if not done before
+library(wisselstroom)
+```
+
 
 After installing the package `wisselstroom`, and loading it, running the following lines will give you a quick insight in the flows regarding switch (change the path if you want to use your own bekostingsbestand):    
 
