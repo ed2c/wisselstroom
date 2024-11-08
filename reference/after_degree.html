@@ -41,7 +41,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">after_degree</span><span class="op">(</span><span class="va">program_of_interest</span>, <span class="va">my_vlpbek_compact</span>, prop_exam <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">after_degree</span><span class="op">(</span><span class="va">program_of_interest</span>, <span class="va">my_flow_insights</span>, prop_exam <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -52,8 +52,8 @@
 <dd><p>string containing the 5-character program code of interest</p></dd>
 
 
-<dt id="arg-my-vlpbek-compact">my_vlpbek_compact<a class="anchor" aria-label="anchor" href="#arg-my-vlpbek-compact"></a></dt>
-<dd><p>a vlpbek_compact object</p></dd>
+<dt id="arg-my-flow-insights">my_flow_insights<a class="anchor" aria-label="anchor" href="#arg-my-flow-insights"></a></dt>
+<dd><p>a flow_insights object</p></dd>
 
 
 <dt id="arg-prop-exam">prop_exam<a class="anchor" aria-label="anchor" href="#arg-prop-exam"></a></dt>
@@ -70,7 +70,7 @@
 <dd><p>D for propedeutic, A for AD, B for Bachelor or M for Master</p></dd>
 
 <dt>brin_own</dt>
-<dd><p>brin_own from the my_vlpbek_compact object</p></dd>
+<dd><p>brin_own from the my_flow_insights object</p></dd>
 
 <dt>academic_year_from</dt>
 <dd><p>the earliest academic year in the data</p></dd>
@@ -99,7 +99,7 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="fu">after_degree</span><span class="op">(</span>program_of_interest <span class="op">=</span> <span class="st">"34507"</span>,</span></span>
-<span class="r-in"><span> my_vlpbek_compact <span class="op">=</span> <span class="va">my_vlp_compact_thing</span>,</span></span>
+<span class="r-in"><span> my_flow_insights <span class="op">=</span> <span class="va">my_insights_object</span>,</span></span>
 <span class="r-in"><span>  prop_exam <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
@@ -113,7 +113,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>

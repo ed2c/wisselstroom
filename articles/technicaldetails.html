@@ -69,42 +69,60 @@
 
     
     
-<p>In this article you can read about the calculations made to obtain
-the <code>wisselstroom</code> objects.</p>
+<p>In this article you can read about the objects and calculations made
+in the functions of <code>wisselstroom</code></p>
 <div class="section level2">
 <h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ed2c.github.io/wisselstroom/">wisselstroom</a></span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># making the objects</span></span>
-<span></span>
-<span><span class="co"># To read in your institution specific bekostigingsbestand, </span></span>
-<span><span class="co"># change path_to_file accordingly.</span></span>
-<span><span class="va">path_to_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">'wisselstroom'</span><span class="op">)</span>,</span>
-<span>                           <span class="st">"VLPBEK_2025_20240115_99XX.csv"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># read the data and place it in an R data.frame</span></span>
-<span><span class="va">my_vlpbek_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_vlpbek_data.html">read_vlpbek_data</a></span><span class="op">(</span><span class="va">path_to_file</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># make the my_vlpbek object from the my_vlpbek_data object</span></span>
-<span><span class="va">my_vlpbek</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vlpbek.html">vlpbek</a></span><span class="op">(</span><span class="va">my_vlpbek_data</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="co"># make the my_vlpbek_compact object from the my_vlpbek object</span></span>
-<span><span class="va">my_vlpbek_compact</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compact_vlpbek.html">compact_vlpbek</a></span><span class="op">(</span><span class="va">my_vlpbek</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="a-closer-look-at-the-objects">A closer look at the objects<a class="anchor" aria-label="anchor" href="#a-closer-look-at-the-objects"></a>
+<h2 id="reading-in-data-with-read_bek_data">Reading in data with <code>read_bek_data()</code><a class="anchor" aria-label="anchor" href="#reading-in-data-with-read_bek_data"></a>
 </h2>
+<p>A bekostigingsbestand can be considered a container for 5 different
+sub files with records that are intermingled. Each sub file type has its
+own interpretation of the columns. The first step to work with a
+bekostigingsbestand, is to read it in, with help of the function
+<code><a href="../reference/read_bek_data.html">read_bek_data()</a></code>. When reading the data, some checks are
+made by this function on the filename. So be sure to have the original
+filename. And the original data.</p>
 <div class="section level3">
-<h3 id="data-set-as-read-in-with-read_vlpbek">Data set as read in with <code>read_vlpbek()</code><a class="anchor" aria-label="anchor" href="#data-set-as-read-in-with-read_vlpbek"></a>
+<h3 id="code-to-make-the-object">Code to make the object<a class="anchor" aria-label="anchor" href="#code-to-make-the-object"></a>
 </h3>
+<p>The following code reads in a bekostigingsbestand:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># To read in your institution specific bekostigingsbestand, </span></span>
+<span><span class="co"># change path_to_file accordingly.</span></span>
+<span><span class="va">path_to_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">'wisselstroom'</span><span class="op">)</span>,</span>
+<span>                          <span class="st">"VLPBEK_2025_20240115_99XX.csv"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># read the data and place it in an R data.frame</span></span>
+<span><span class="va">my_bek_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_bek_data.html">read_bek_data</a></span><span class="op">(</span><span class="va">path_to_file</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="a-closer-look-at-the-object">A closer look at the object<a class="anchor" aria-label="anchor" href="#a-closer-look-at-the-object"></a>
+</h3>
+<p>The resulting object <code>my_bek_data</code>, is a
+<code>data.frame</code>, with an extra attribute denoting the type of
+read-in bekostigingsbestand:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_vlpbek_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_vlpbek_data.html">read_vlpbek_data</a></span><span class="op">(</span><span class="va">path_to_file</span><span class="op">)</span></span></code></pre></div>
-<p>The first 10 rows and 9 columns:</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">my_bek_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "data.frame"</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_vlpbek_data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">9</span><span class="op">]</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">my_bek_data</span><span class="op">)</span><span class="op">$</span><span class="va">comment</span></span>
+<span><span class="co">#&gt; [1] "VLPBEK"</span></span></code></pre></div>
+<p>Every row in the orginal csv file becomes a row in the
+<code>data.frame</code>. The separator in the csv file splits up the row
+into columns. All 25 columns are read in as character. The columns are
+given a general name (V1, V2, V3, …), since the content can have a
+different meaning depending on the sub file type. In order to gain
+insight in wisselstromen, we do not need all content of the
+bekostigingsbestanden. In the example file, this content is x-ed
+out.</p>
+<p>Have a look at the first 10 rows and 9 columns:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">my_bek_data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">9</span><span class="op">]</span></span>
 <span><span class="co">#&gt;     V1        V2        V3       V4       V5 V6    V7   V8    V9</span></span>
 <span><span class="co">#&gt; 1  VLP      99XX      2025 20240115                             </span></span>
 <span><span class="co">#&gt; 2  BLB 700010101 800010101                                      </span></span>
@@ -116,110 +134,61 @@ the <code>wisselstroom</code> objects.</p>
 <span><span class="co">#&gt; 8  BRD 700010078 800010078     99XX xxxxxxxx  N    xx      31003</span></span>
 <span><span class="co">#&gt; 9  BLB 700010068 800010068                                      </span></span>
 <span><span class="co">#&gt; 10 BRD 700010068 800010068     99XX xxxxxxxx  N    xx      31004</span></span></code></pre></div>
-<p>Have a look at the structure of the read-in example data:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">my_vlpbek_data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'data.frame':    310 obs. of  25 variables:</span></span>
-<span><span class="co">#&gt;  $ V1 : chr  "VLP" "BLB" "BRD" "BRD" ...</span></span>
-<span><span class="co">#&gt;  $ V2 : chr  "99XX" "700010101" "700010101" "700010101" ...</span></span>
-<span><span class="co">#&gt;  $ V3 : chr  "2025" "800010101" "800010101" "800010101" ...</span></span>
-<span><span class="co">#&gt;  $ V4 : chr  "20240115" "" "99XX" "99XX" ...</span></span>
-<span><span class="co">#&gt;  $ V5 : chr  "" "" "xxxxxxxx" "xxxxxxxx" ...</span></span>
-<span><span class="co">#&gt;  $ V6 : chr  "" "" "N" "J" ...</span></span>
-<span><span class="co">#&gt;  $ V7 : chr  "" "" "xx" "xx" ...</span></span>
-<span><span class="co">#&gt;  $ V8 : chr  "" "" "xxxx" "xxxx" ...</span></span>
-<span><span class="co">#&gt;  $ V9 : chr  "" "" "31001" "31001" ...</span></span>
-<span><span class="co">#&gt;  $ V10: chr  "" "x" "HBO-BA" "HBO-BA" ...</span></span>
-<span><span class="co">#&gt;  $ V11: chr  "" "x" "D" "B" ...</span></span>
-<span><span class="co">#&gt;  $ V12: chr  "" "x" "20220901" "20230901" ...</span></span>
-<span><span class="co">#&gt;  $ V13: chr  "" "x" "20230625" "20240831" ...</span></span>
-<span><span class="co">#&gt;  $ V14: chr  "" "x" "x" "x" ...</span></span>
-<span><span class="co">#&gt;  $ V15: chr  "" "x" "S" "S" ...</span></span>
-<span><span class="co">#&gt;  $ V16: chr  "" "x" "DT" "DT" ...</span></span>
-<span><span class="co">#&gt;  $ V17: chr  "" "x" "xxxxxxxx" "xxxxxxxx" ...</span></span>
-<span><span class="co">#&gt;  $ V18: chr  "" "x" "xx" "xx" ...</span></span>
-<span><span class="co">#&gt;  $ V19: chr  "" "x" "GEDRAG_EN_MAATSCHAPPIJ" "GEDRAG_EN_MAATSCHAPPIJ" ...</span></span>
-<span><span class="co">#&gt;  $ V20: chr  "" "x" "BEKOSTIGD" "BEKOSTIGD" ...</span></span>
-<span><span class="co">#&gt;  $ V21: chr  "" "x" "" "x" ...</span></span>
-<span><span class="co">#&gt;  $ V22: chr  "" "" "" "x" ...</span></span>
-<span><span class="co">#&gt;  $ V23: chr  "" "" "" "x" ...</span></span>
-<span><span class="co">#&gt;  $ V24: chr  "" "" "x" "x" ...</span></span>
-<span><span class="co">#&gt;  $ V25: chr  "" "" "x" "x" ...</span></span></code></pre></div>
+<p>The first column denotes the sub file type of the row:</p>
+<ul>
+<li>the first row and only this row, is a “VLP” (voorlooprecord) with
+metadata</li>
+<li>“BLB” records (bekostigingsloopbaan student) are metadata regarding
+a student’s study career in HE</li>
+<li>“BRD” records (bekostigingsresultaat deelname), details about a
+specific enrolment of a student</li>
+<li>“BRR” records (bekostigingsresultaat resultaat), details about a
+specific obtained degree of a student</li>
+<li>the last row and only this row, is a “SLR” (sluitrecord) containing
+the number of BLB, BRD and BRR rows</li>
+</ul>
+<p>This <code>data.frame</code> is useful if you want to see what the
+csv actually contains. For the use of gaining wisselstroom insights, we
+will not use all columns, nor all sub file types. We only need a part of
+these data. This is the next step.</p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="disentangle-the-data-with-make_flow_basics">Disentangle the data with <code>make_flow_basics()</code><a class="anchor" aria-label="anchor" href="#disentangle-the-data-with-make_flow_basics"></a>
+</h2>
+<p>The previous step let to a <code>data.frame</code> where all the sub
+file types are still together. In this step the sub file types are
+separated, and the data we need for getting our insights is extracted.
+Some new variables are added, based on the data in the file.</p>
 <div class="section level3">
-<h3 id="vlpbek-object-as-made-with-vlpbek">vlpbek object as made with <code>vlpbek()</code><a class="anchor" aria-label="anchor" href="#vlpbek-object-as-made-with-vlpbek"></a>
+<h3 id="code-to-make-the-object-1">Code to make the object<a class="anchor" aria-label="anchor" href="#code-to-make-the-object-1"></a>
 </h3>
+<p>Assuming the object <code>my_bek_data</code> is already made in the
+previous step, this line of code processes <code>my_bek_data</code> with
+help of the function <code><a href="../reference/make_flow_basics.html">make_flow_basics()</a></code> into a
+<code>flow_basics</code> object:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># make the actual my_vlpbek object from the my_vlpbek_data object</span></span>
-<span><span class="va">my_vlpbek</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vlpbek.html">vlpbek</a></span><span class="op">(</span><span class="va">my_vlpbek_data</span><span class="op">)</span></span></code></pre></div>
-<p>Have a look at the structure of the newly made <code>my_vlpbek</code>
-object:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">my_vlpbek</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 5</span></span>
-<span><span class="co">#&gt;  $ brin_own      : chr "99XX"</span></span>
-<span><span class="co">#&gt;  $ year_funding  : chr "2025"</span></span>
-<span><span class="co">#&gt;  $ date_retrieval: Date[1:1], format: "2024-01-15"</span></span>
-<span><span class="co">#&gt;  $ enrolments    :'data.frame':  181 obs. of  11 variables:</span></span>
-<span><span class="co">#&gt;   ..$ student_id       : chr [1:181] "b700010101" "b700010101" "b700010101" "b700010093" ...</span></span>
-<span><span class="co">#&gt;   ..$ BRIN             : chr [1:181] "99XX" "99XX" "99XX" "99XX" ...</span></span>
-<span><span class="co">#&gt;   ..$ program_code     : chr [1:181] "31001" "31001" "31001" "31002" ...</span></span>
-<span><span class="co">#&gt;   ..$ program_level    : chr [1:181] "HBO-BA" "HBO-BA" "HBO-BA" "HBO-BA" ...</span></span>
-<span><span class="co">#&gt;   ..$ program_phase    : chr [1:181] "D" "B" "B" "D" ...</span></span>
-<span><span class="co">#&gt;   ..$ date_enrolment   : Date[1:181], format: "2022-09-01" "2023-09-01" ...</span></span>
-<span><span class="co">#&gt;   ..$ date_disenrolment: Date[1:181], format: "2023-06-25" "2024-08-31" ...</span></span>
-<span><span class="co">#&gt;   ..$ enrolment_form   : chr [1:181] "S" "S" "S" "S" ...</span></span>
-<span><span class="co">#&gt;   ..$ program_form     : chr [1:181] "DT" "DT" "DT" "DT" ...</span></span>
-<span><span class="co">#&gt;   ..$ sector           : chr [1:181] "GEDRAG_EN_MAATSCHAPPIJ" "GEDRAG_EN_MAATSCHAPPIJ" "GEDRAG_EN_MAATSCHAPPIJ" "" ...</span></span>
-<span><span class="co">#&gt;   ..$ academic_year    : chr [1:181] "2022/2023" "2023/2024" "2022/2023" "2022/2023" ...</span></span>
-<span><span class="co">#&gt;  $ degrees       :'data.frame':  33 obs. of  9 variables:</span></span>
-<span><span class="co">#&gt;   ..$ student_id     : chr [1:33] "b700010101" "b700010003" "b700010057" "b700010089" ...</span></span>
-<span><span class="co">#&gt;   ..$ BRIN           : chr [1:33] "99XX" "99XX" "99XX" "99XX" ...</span></span>
-<span><span class="co">#&gt;   ..$ program_code   : chr [1:33] "31001" "31015" "31003" "31004" ...</span></span>
-<span><span class="co">#&gt;   ..$ program_level  : chr [1:33] "HBO-BA" "HBO-BA" "HBO-BA" "HBO-BA" ...</span></span>
-<span><span class="co">#&gt;   ..$ program_phase  : chr [1:33] "D" "D" "B" "B" ...</span></span>
-<span><span class="co">#&gt;   ..$ date_graduation: Date[1:33], format: "2023-06-25" "2023-07-07" ...</span></span>
-<span><span class="co">#&gt;   ..$ program_form   : chr [1:33] "DT" "VT" "VT" "VT" ...</span></span>
-<span><span class="co">#&gt;   ..$ sector         : chr [1:33] "GEDRAG_EN_MAATSCHAPPIJ" "TECHNIEK" "ECONOMIE" "TECHNIEK" ...</span></span>
-<span><span class="co">#&gt;   ..$ academic_year  : chr [1:33] "2022/2023" "2022/2023" "2022/2023" "2022/2023" ...</span></span>
-<span><span class="co">#&gt;  - attr(*, "class")= chr "vlpbek"</span></span></code></pre></div>
-<p>Compared to the original dataset, the VLP record is translated to
-first 3 items. The rows containing the SLR record (totals per record
-type) and the BLB records (studycareer totals per student) are
-ignored.</p>
-<p>All the BRD records (enrolment) are placed in its own
-<code>enrolment</code> <code>data.frame</code>, as are all the BRR
-records (degrees) in the <code>degrees</code> <code>data.frame</code>.
-Only the relevant columns for wisselstroom insights are included. A
-column <code>academic_year</code> is added to both
-<code>data.frames</code>, calculated on basis of
-<code>date_enrolment</code> for the <code>enrolments</code>, and on
-<code>date_graduation</code> for the <code>degrees</code>.</p>
-<p>The column <code>student_id</code> is calculated from two original
-columns in the <code>my_vlpbek_data</code>, <code>V2</code> and
-<code>V3</code>:<br>
-- <code>V2</code> contains the BSN of the student - <code>V3</code>
-contains the onderwijsnummer (educationa number) of the student - if
-<code>V2</code> has a value, student_id gets that number , prefixed with
-a “b”, short for BSN - if <code>V2</code> does not have a value,
-student_id becomes V3, with prefix “e” for educational number</p>
+<code class="sourceCode R"><span><span class="co"># make the my_flow_basics object from the my_bek_data object</span></span>
+<span><span class="va">my_flow_basics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_flow_basics.html">make_flow_basics</a></span><span class="op">(</span><span class="va">my_bek_data</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="vlpbek_compact-object-as-made-with-compact_vlpbek">vlpbek_compact object as made with
-<code>compact_vlpbek()</code><a class="anchor" aria-label="anchor" href="#vlpbek_compact-object-as-made-with-compact_vlpbek"></a>
+<h3 id="a-closer-look-at-the-object-1">A closer look at the object<a class="anchor" aria-label="anchor" href="#a-closer-look-at-the-object-1"></a>
 </h3>
+<p>The newly made <code>my_flow_basics</code> object is of type
+<code>flow_basics</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">my_flow_basics</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "flow_basics"</span></span></code></pre></div>
+<p>The structure of this object is a list containing 5 elements:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># make the my_vlpbek_compact object from the my_vlpbek object</span></span>
-<span><span class="va">my_vlpbek_compact</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compact_vlpbek.html">compact_vlpbek</a></span><span class="op">(</span><span class="va">my_vlpbek</span><span class="op">)</span></span></code></pre></div>
-<p>Have a look at the structure of <code>my_vlpbek</code> object:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">my_vlpbek</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">my_flow_basics</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 5</span></span>
+<span><span class="co">#&gt;  $ type          : chr "VLPBEK"</span></span>
 <span><span class="co">#&gt;  $ brin_own      : chr "99XX"</span></span>
-<span><span class="co">#&gt;  $ year_funding  : chr "2025"</span></span>
 <span><span class="co">#&gt;  $ date_retrieval: Date[1:1], format: "2024-01-15"</span></span>
-<span><span class="co">#&gt;  $ enrolments    :'data.frame':  181 obs. of  11 variables:</span></span>
+<span><span class="co">#&gt;  $ enrolments    :'data.frame':  181 obs. of  12 variables:</span></span>
 <span><span class="co">#&gt;   ..$ student_id       : chr [1:181] "b700010101" "b700010101" "b700010101" "b700010093" ...</span></span>
+<span><span class="co">#&gt;   ..$ year_funding     : chr [1:181] "2025" "2025" "2025" "2025" ...</span></span>
 <span><span class="co">#&gt;   ..$ BRIN             : chr [1:181] "99XX" "99XX" "99XX" "99XX" ...</span></span>
 <span><span class="co">#&gt;   ..$ program_code     : chr [1:181] "31001" "31001" "31001" "31002" ...</span></span>
 <span><span class="co">#&gt;   ..$ program_level    : chr [1:181] "HBO-BA" "HBO-BA" "HBO-BA" "HBO-BA" ...</span></span>
@@ -230,8 +199,10 @@ student_id becomes V3, with prefix “e” for educational number</p>
 <span><span class="co">#&gt;   ..$ program_form     : chr [1:181] "DT" "DT" "DT" "DT" ...</span></span>
 <span><span class="co">#&gt;   ..$ sector           : chr [1:181] "GEDRAG_EN_MAATSCHAPPIJ" "GEDRAG_EN_MAATSCHAPPIJ" "GEDRAG_EN_MAATSCHAPPIJ" "" ...</span></span>
 <span><span class="co">#&gt;   ..$ academic_year    : chr [1:181] "2022/2023" "2023/2024" "2022/2023" "2022/2023" ...</span></span>
-<span><span class="co">#&gt;  $ degrees       :'data.frame':  33 obs. of  9 variables:</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "comment")= chr "VLPBEK"</span></span>
+<span><span class="co">#&gt;  $ degrees       :'data.frame':  33 obs. of  10 variables:</span></span>
 <span><span class="co">#&gt;   ..$ student_id     : chr [1:33] "b700010101" "b700010003" "b700010057" "b700010089" ...</span></span>
+<span><span class="co">#&gt;   ..$ year_funding   : chr [1:33] "2025" "2025" "2025" "2025" ...</span></span>
 <span><span class="co">#&gt;   ..$ BRIN           : chr [1:33] "99XX" "99XX" "99XX" "99XX" ...</span></span>
 <span><span class="co">#&gt;   ..$ program_code   : chr [1:33] "31001" "31015" "31003" "31004" ...</span></span>
 <span><span class="co">#&gt;   ..$ program_level  : chr [1:33] "HBO-BA" "HBO-BA" "HBO-BA" "HBO-BA" ...</span></span>
@@ -240,7 +211,482 @@ student_id becomes V3, with prefix “e” for educational number</p>
 <span><span class="co">#&gt;   ..$ program_form   : chr [1:33] "DT" "VT" "VT" "VT" ...</span></span>
 <span><span class="co">#&gt;   ..$ sector         : chr [1:33] "GEDRAG_EN_MAATSCHAPPIJ" "TECHNIEK" "ECONOMIE" "TECHNIEK" ...</span></span>
 <span><span class="co">#&gt;   ..$ academic_year  : chr [1:33] "2022/2023" "2022/2023" "2022/2023" "2022/2023" ...</span></span>
-<span><span class="co">#&gt;  - attr(*, "class")= chr "vlpbek"</span></span></code></pre></div>
+<span><span class="co">#&gt;   ..- attr(*, "comment")= chr "VLPBEK"</span></span>
+<span><span class="co">#&gt;  - attr(*, "class")= chr "flow_basics"</span></span></code></pre></div>
+<p>The elements of the list:</p>
+<ul>
+<li>
+<code>type</code>: either “VLPBEK”, “DEFBEK” or “HISBEK”</li>
+<li>
+<code>brin_own</code>: the administrative number of the HEI
+concerned</li>
+<li>
+<code>date_retrieval</code>: the date the original
+bekostigingsbestand is made</li>
+<li>
+<code>enrolments</code>: a <code>data.frame</code> containing
+enrolment data</li>
+<li>
+<code>degrees</code>: a <code>data.frame</code> containing data on
+obtained degrees</li>
+</ul>
+<p>If you want to address one of the 5 items in the
+<code>my_flow_basics</code> object, you can do that with the
+<code>$</code> operator, for instance:</p>
+<ul>
+<li>
+<code>my_flow_basics$brin_own</code> to get a text containing the
+own brin</li>
+<li>
+<code>my_flow_basics$enrolment</code> to get a
+<code>data.frame</code> containing the enrolment data</li>
+</ul>
+<div class="section level4">
+<h4 id="type-brin_own-date_retrieval">
+<code>type</code>, <code>brin_own</code>,
+<code>date_retrieval</code><a class="anchor" aria-label="anchor" href="#type-brin_own-date_retrieval"></a>
+</h4>
+<p>The VLP record of the original data set, is translated to these 3
+items.</p>
+</div>
+<div class="section level4">
+<h4 id="enrolments">
+<code>enrolments</code><a class="anchor" aria-label="anchor" href="#enrolments"></a>
+</h4>
+<ul>
+<li>All the BRD records (enrolment) of the original data set are placed
+in the <code>enrolments</code> <code>data.frame</code> of the
+<code>flow_basics</code> object.</li>
+<li>Only the relevant columns for wisselstroom insights are
+included.</li>
+<li>A column <code>academic_year</code> is added calculated on basis of
+<code>date_enrolment</code>.</li>
+<li>A column <code>student_id</code> is calculated from two original
+columns in the <code>my_bek_data</code>, <code>V2</code> and
+<code>V3</code>:
+<ul>
+<li>
+<code>V2</code> contains the BSN of the student</li>
+<li>
+<code>V3</code> contains the onderwijsnummer (educationa number) of
+the student</li>
+<li>if <code>V2</code> has a value, student_id gets that value ,
+prefixed with a “b”, short for BSN</li>
+<li>if <code>V2</code> does not have a value, student_id gets the value
+of V3, with prefix “e” for educational number</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="degrees">
+<code>degrees</code><a class="anchor" aria-label="anchor" href="#degrees"></a>
+</h4>
+<ul>
+<li>All the BRR records (degrees) of the original data set are placed in
+the <code>degree</code> <code>data.frame</code> of the
+<code>flow_basics</code> object.</li>
+<li>Only the relevant columns for wisselstroom insights are
+included.</li>
+<li>A column <code>academic_year</code> is added to calculated on basis
+of <code>date_graduation</code>.</li>
+<li>A column <code>student_id</code> is calculated from two original
+columns in the <code>my_bek_data</code>, <code>V2</code> and
+<code>V3</code>:
+<ul>
+<li>
+<code>V2</code> contains the BSN of the student</li>
+<li>
+<code>V3</code> contains the onderwijsnummer (educationa number) of
+the student</li>
+<li>if <code>V2</code> has a value, student_id gets that value ,
+prefixed with a “b”, short for BSN</li>
+<li>if <code>V2</code> does not have a value, student_id gets the value
+of V3, with prefix “e” for educational number</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="remarks">Remarks<a class="anchor" aria-label="anchor" href="#remarks"></a>
+</h4>
+<ul>
+<li>The rows containing the SLR record (totals per record type) and the
+BLB records (study career totals per student) are not neded for the
+wisselstrroom calculation, hence ignored.</li>
+<li>This functon also works for HISBEK data. it can help you browse
+through the data. The HISBEK data itself, is at the moment not further
+implemented in the package <code>wisselstroom</code>.</li>
+</ul>
+<p>This object is useful if you want to have an overview of the
+enrolments, or the degrees. For the use of gaining wisselstroom
+insights, we need to make a <code>flow_insights</code> object. This is
+the next step.</p>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="make-the-insights-with-make_flow_insights">Make the insights with <code>make_flow_insights()</code><a class="anchor" aria-label="anchor" href="#make-the-insights-with-make_flow_insights"></a>
+</h2>
+<p>The previous step led to a <code>flow_basics object</code> with
+disentangled data needed for flow insights. In this step the actual
+calculations are done. Enrolments are condensed, some new variables
+including degree information are added, based on the data in the file.
+The function <code><a href="../reference/make_flow_insights.html">make_flow_insights()</a></code> will only work for a
+<code>flow_basics</code> object of type “VLPBEK” of “DEFBEK”, not for
+type “HISBEK”.</p>
+<div class="section level3">
+<h3 id="code-to-make-the-object-2">Code to make the object<a class="anchor" aria-label="anchor" href="#code-to-make-the-object-2"></a>
+</h3>
+<p>Assuming the object <code>my_flow_basics</code> is already made in
+the previous step, this line of code processes
+<code>my_flow_basics</code> with help of the function
+<code><a href="../reference/make_flow_insights.html">make_flow_insights()</a></code> into a <code>flow_insights</code>
+object:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># make the flow_insights object from the my_flow_basics object</span></span>
+<span><span class="va">my_flow_insights</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_flow_insights.html">make_flow_insights</a></span><span class="op">(</span><span class="va">my_flow_basics</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="a-closer-look-at-the-object-2">A closer look at the object<a class="anchor" aria-label="anchor" href="#a-closer-look-at-the-object-2"></a>
+</h3>
+<p>The newly made <code>my_flow_insights</code> object is of type
+<code>flow_insights</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">my_flow_insights</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "flow_insights"</span></span></code></pre></div>
+<p>The structure of this object is a list containing 7 elements:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">my_flow_insights</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 7</span></span>
+<span><span class="co">#&gt;  $ type                      : chr "VLPBEK"</span></span>
+<span><span class="co">#&gt;  $ brin_own                  : chr "99XX"</span></span>
+<span><span class="co">#&gt;  $ date_retrieval            : Date[1:1], format: "2024-01-15"</span></span>
+<span><span class="co">#&gt;  $ enrolments_degrees_compact: tibble [163 × 35] (S3: tbl_df/tbl/data.frame)</span></span>
+<span><span class="co">#&gt;   ..$ academic_year            : chr [1:163] "2022/2023" "2022/2023" "2022/2023" "2022/2023" ...</span></span>
+<span><span class="co">#&gt;   ..$ student_id               : chr [1:163] "b700010000" "b700010003" "b700010005" "b700010006" ...</span></span>
+<span><span class="co">#&gt;   ..$ BRIN                     : chr [1:163] "99XX" "99XX" "99XX" "99XX" ...</span></span>
+<span><span class="co">#&gt;   ..$ program_code             : chr [1:163] "31009" "31015" "31022" "31015" ...</span></span>
+<span><span class="co">#&gt;   ..$ program_level            : chr [1:163] "HBO-BA" "HBO-BA" "HBO-BA" "HBO-BA" ...</span></span>
+<span><span class="co">#&gt;   ..$ program_form             : chr [1:163] "VT" "VT" "VT" "VT" ...</span></span>
+<span><span class="co">#&gt;   ..$ date_enrolment           : Date[1:163], format: "2022-09-01" "2022-09-01" ...</span></span>
+<span><span class="co">#&gt;   ..$ date_disenrolment        : Date[1:163], format: "2023-08-31" "2023-08-31" ...</span></span>
+<span><span class="co">#&gt;   ..$ date_graduation_D        : Date[1:163], format: NA "2023-07-07" ...</span></span>
+<span><span class="co">#&gt;   ..$ date_graduation_B        : Date[1:163], format: NA NA ...</span></span>
+<span><span class="co">#&gt;   ..$ date_graduation_M        : Date[1:163], format: NA NA ...</span></span>
+<span><span class="co">#&gt;   ..$ date_graduation_A        : logi [1:163] NA NA NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;   ..$ enrolment_type           : chr [1:163] "single" "single" "single" "single" ...</span></span>
+<span><span class="co">#&gt;   ..$ enrolment                : chr [1:163] "HBO-BA-99XX-31009" "HBO-BA-99XX-31015" "HBO-BA-99XX-31022" "HBO-BA-99XX-31015" ...</span></span>
+<span><span class="co">#&gt;   ..$ situation_degree         : chr [1:163] NA "D" NA "D" ...</span></span>
+<span><span class="co">#&gt;   ..$ situation_brin           : chr [1:163] "brin_own" "brin_own" "brin_own" "brin_own" ...</span></span>
+<span><span class="co">#&gt;   ..$ situations_brin          : chr [1:163] "brin_own" "brin_own" "brin_own" "brin_own" ...</span></span>
+<span><span class="co">#&gt;   ..$ situations_level         : chr [1:163] "HBO-BA" "HBO-BA" "HBO-BA" "HBO-BA" ...</span></span>
+<span><span class="co">#&gt;   ..$ situations_degree        : chr [1:163] "" "D" "" "D" ...</span></span>
+<span><span class="co">#&gt;   ..$ n_enrolments             : int [1:163] 1 1 1 1 1 1 2 2 1 1 ...</span></span>
+<span><span class="co">#&gt;   ..$ all_enrolments           : chr [1:163] "HBO-BA-99XX-31009" "HBO-BA-99XX-31015" "HBO-BA-99XX-31022" "HBO-BA-99XX-31015" ...</span></span>
+<span><span class="co">#&gt;   ..$ final_degree             : logi [1:163] FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
+<span><span class="co">#&gt;   ..$ n_final_degrees_minyear  : int [1:163] 0 0 0 0 0 0 1 1 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ all_enrolments_otheryear : chr [1:163] "HBO-BA-99XX-31009" "HBO-BA-99XX-31015" NA "HBO-BA-99XX-31015" ...</span></span>
+<span><span class="co">#&gt;   ..$ n_enrolments_otheryear   : num [1:163] 1 1 0 1 1 0 1 1 1 1 ...</span></span>
+<span><span class="co">#&gt;   ..$ situations_brin_otheryear: chr [1:163] "brin_own" "brin_own" "outside HE" "brin_own" ...</span></span>
+<span><span class="co">#&gt;   ..$ suffix                   : chr [1:163] "(1_1)" "(1_1)" "(1_0)" "(1_1)" ...</span></span>
+<span><span class="co">#&gt;   ..$ enrolment_is_in_bothyears: logi [1:163] TRUE TRUE FALSE TRUE FALSE FALSE ...</span></span>
+<span><span class="co">#&gt;   ..$ student_is_in_bothyears  : logi [1:163] TRUE TRUE FALSE TRUE TRUE FALSE ...</span></span>
+<span><span class="co">#&gt;   ..$ all_final_degrees_minyear: logi [1:163] FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
+<span><span class="co">#&gt;   ..$ any_final_degrees_minyear: logi [1:163] FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
+<span><span class="co">#&gt;   ..$ all_new_otheryear        : logi [1:163] FALSE FALSE NA FALSE TRUE NA ...</span></span>
+<span><span class="co">#&gt;   ..$ any_new_otheryear        : logi [1:163] FALSE FALSE NA FALSE TRUE NA ...</span></span>
+<span><span class="co">#&gt;   ..$ flow                     : chr [1:163] "stay" "stay" "stop" "stay" ...</span></span>
+<span><span class="co">#&gt;   ..$ flow_direction           : chr [1:163] "flow_to" "flow_to" "flow_to" "flow_to" ...</span></span>
+<span><span class="co">#&gt;  $ switches                  : tibble [9 × 6] (S3: tbl_df/tbl/data.frame)</span></span>
+<span><span class="co">#&gt;   ..$ from_brin               : chr [1:9] "73CC" "73CC" "74DD" "99XX" ...</span></span>
+<span><span class="co">#&gt;   ..$ from_program            : chr [1:9] "51021" "51025" "51025" "31005" ...</span></span>
+<span><span class="co">#&gt;   ..$ all_enrolments_otheryear: chr [1:9] "HBO-BA-99XX-31007" "HBO-BA-99XX-31009" "HBO-BA-99XX-31009" "HBO-BA-71AA-31005" ...</span></span>
+<span><span class="co">#&gt;   ..$ total_switch            : int [1:9] 1 1 1 1 1 1 1 1 1</span></span>
+<span><span class="co">#&gt;   ..$ with_prop               : int [1:9] 0 0 0 0 0 0 0 0 0</span></span>
+<span><span class="co">#&gt;   ..$ other                   : int [1:9] 1 1 1 1 1 1 1 1 1</span></span>
+<span><span class="co">#&gt;  $ summary_situations_brin   : tibble [6 × 3] (S3: tbl_df/tbl/data.frame)</span></span>
+<span><span class="co">#&gt;   ..$ situation_brin_2022/2023: chr [1:6] "brin_own" "brin_own" "brin_own" "brin_own &amp; other HE" ...</span></span>
+<span><span class="co">#&gt;   ..$ situation_brin_2023/2024: chr [1:6] "brin_own" "other HE" "outside HE" "other HE" ...</span></span>
+<span><span class="co">#&gt;   ..$ n_students              : int [1:6] 49 4 24 1 2 24</span></span>
+<span><span class="co">#&gt;  $ summary_situations_level  : tibble [10 × 3] (S3: tbl_df/tbl/data.frame)</span></span>
+<span><span class="co">#&gt;   ..$ situation_level_2022/2023: chr [1:10] "HBO-AD" "HBO-BA" "HBO-BA" "HBO-BA" ...</span></span>
+<span><span class="co">#&gt;   ..$ situation_level_2023/2024: chr [1:10] "outside HE" "HBO-BA" "WO-MA" "outside HE" ...</span></span>
+<span><span class="co">#&gt;   ..$ n_students               : int [1:10] 1 50 1 17 1 2 6 2 18 6</span></span>
+<span><span class="co">#&gt;  - attr(*, "class")= chr "flow_insights"</span></span></code></pre></div>
+<p>The elements of the list:</p>
+<ul>
+<li>
+<code>type</code>: either “VLPBEK” or “DEFBEK”</li>
+<li>
+<code>brin_own</code>: the administrative number of the HEI
+concerned</li>
+<li>
+<code>date_retrieval</code>: the date the original
+bekostigingsbestand is made</li>
+<li>
+<code>enrolments_degrees_compact</code>: a <code>data.frame</code>
+with compact enrolment data, adorned with degree data if applicable</li>
+<li>
+<code>switches</code>: a <code>data.frame</code> containing data on
+switches (from a program without a degree to another program)</li>
+<li>
+<code>summary_presences_brin</code>: presences_brin per academic
+year summarised over students</li>
+<li>
+<code>summary_presences_level</code>: presences_level per academic
+year summarised over students</li>
+</ul>
+<div class="section level4">
+<h4 id="type-brin_own-date_retrieval-1">
+<code>type</code>, <code>brin_own</code>,
+<code>date_retrieval</code><a class="anchor" aria-label="anchor" href="#type-brin_own-date_retrieval-1"></a>
+</h4>
+<p>These items are copied from the <code>flow_basics</code> object that
+was used as argument.</p>
+</div>
+<div class="section level4">
+<h4 id="enrolments_degrees_compact">
+<code>enrolments_degrees_compact</code><a class="anchor" aria-label="anchor" href="#enrolments_degrees_compact"></a>
+</h4>
+<ul>
+<li>An enrolment is seen as the combination of academic year, student,
+program and institution.</li>
+<li>In a DEFBEK or VLPBEK, there is data from two academic years.</li>
+<li>In the enrolment data.frame in flows_basics, there can be multiple
+rows for a student enrolled in the same program at the same institution
+in the same academic year, only with different dates of enrolment or
+disenrolment, or program forms. In this <code>data.frame</code> these
+rows are condensed into one. - Added to this starting
+<code>data.frame</code> the date_graduation is added, including a
+propedeutical degree when present. Some extra variables are added, some
+on enrolment level, some on student level.</li>
+</ul>
+<p>Variables in <code>enrolments_degrees_compact</code>:</p>
+<table class="table">
+<colgroup>
+<col width="20%">
+<col width="79%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">variables</th>
+<th align="left">explanations</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">academic_year</td>
+<td align="left">academic year date_enrolment</td>
+</tr>
+<tr class="even">
+<td align="left">student_id</td>
+<td align="left">unique identifier student</td>
+</tr>
+<tr class="odd">
+<td align="left">BRIN</td>
+<td align="left">institution of higher education of enrolment</td>
+</tr>
+<tr class="even">
+<td align="left">program_code</td>
+<td align="left">isat/croho of study program</td>
+</tr>
+<tr class="odd">
+<td align="left">program_level</td>
+<td align="left">level of program, one of HBO-AD, HBO-BA, HBO-MA, WO-BA,
+WO-MA</td>
+</tr>
+<tr class="even">
+<td align="left">program_form</td>
+<td align="left">form of enrolment, combination of VT (full-time), DT
+(part-time), DU (dual)</td>
+</tr>
+<tr class="odd">
+<td align="left">date_enrolment</td>
+<td align="left">earliest enrolment date in this academic year for this
+enrolment</td>
+</tr>
+<tr class="even">
+<td align="left">date_disenrolment</td>
+<td align="left">latest disenrolment date in this academic year for this
+enrolment</td>
+</tr>
+<tr class="odd">
+<td align="left">date_graduation_D</td>
+<td align="left">graduation date propedeutic exam</td>
+</tr>
+<tr class="even">
+<td align="left">date_graduation_B</td>
+<td align="left">graduation date bachelor exam</td>
+</tr>
+<tr class="odd">
+<td align="left">date_graduation_M</td>
+<td align="left">graduation date master exam</td>
+</tr>
+<tr class="even">
+<td align="left">date_graduation_A</td>
+<td align="left">graduation date associate degree exam</td>
+</tr>
+<tr class="odd">
+<td align="left">enrolment_type</td>
+<td align="left">single (when student only has one enrolment in this
+academic year), else multiple</td>
+</tr>
+<tr class="even">
+<td align="left">enrolment</td>
+<td align="left">combintion of program level, BRIN and program code</td>
+</tr>
+<tr class="odd">
+<td align="left">situation_degree</td>
+<td align="left">when awarded, the type of degree: D, B, M, A</td>
+</tr>
+<tr class="even">
+<td align="left">situation_brin</td>
+<td align="left">one of ‘brin_own’ or ‘other HE’</td>
+</tr>
+<tr class="odd">
+<td align="left">situations_brin</td>
+<td align="left">combination of situation_brin over all enrolments of
+student in this academic year</td>
+</tr>
+<tr class="even">
+<td align="left">situations_level</td>
+<td align="left">combination of program_level over all enrolments of
+student in this academic year</td>
+</tr>
+<tr class="odd">
+<td align="left">situations_degree</td>
+<td align="left">combination of situation_degree over all enrolments of
+student in this academic year</td>
+</tr>
+<tr class="even">
+<td align="left">n_enrolments</td>
+<td align="left">number of enrolment of this student in this academic
+year</td>
+</tr>
+<tr class="odd">
+<td align="left">all_enrolments</td>
+<td align="left">combination of enrolment over all enrolments of student
+in this academic year</td>
+</tr>
+<tr class="even">
+<td align="left">final_degree</td>
+<td align="left">TRUE if situation_degree is B, M or A, else FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">n_final_degrees_minyear</td>
+<td align="left">the number of final degrees obtained in first year</td>
+</tr>
+<tr class="even">
+<td align="left">all_enrolments_otheryear</td>
+<td align="left">combination of enrolment over all enrolments of student
+in the other academic year in the data</td>
+</tr>
+<tr class="odd">
+<td align="left">n_enrolments_otheryear</td>
+<td align="left">number of enrolment of this student in the other
+academic year in the data</td>
+</tr>
+<tr class="even">
+<td align="left">situations_brin_otheryear</td>
+<td align="left">combination of situation_brin over all enrolments of
+student in the other academic year in the data</td>
+</tr>
+<tr class="odd">
+<td align="left">suffix</td>
+<td align="left">(n_enrolments _ n_enrolment_otheryear)</td>
+</tr>
+<tr class="even">
+<td align="left">enrolment_is_in_bothyears</td>
+<td align="left">TRUE or FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">student_is_in_bothyears</td>
+<td align="left">TRUE or FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">all_final_degrees_minyear</td>
+<td align="left">TRUE if all enrolments of student in first year of data
+end in final degree</td>
+</tr>
+<tr class="odd">
+<td align="left">any_final_degrees_minyear</td>
+<td align="left">TRUE if any enrolment of student in first year of data
+end in final degree</td>
+</tr>
+<tr class="even">
+<td align="left">all_new_otheryear</td>
+<td align="left">TRUE if all enrolments of student in other year are not
+in this year</td>
+</tr>
+<tr class="odd">
+<td align="left">any_new_otheryear</td>
+<td align="left">TRUE if any enrolment of student in other year is not
+in this year</td>
+</tr>
+<tr class="even">
+<td align="left">flow</td>
+<td align="left">one of stay, switch, start, stop, stack, special</td>
+</tr>
+<tr class="odd">
+<td align="left">flow_to</td>
+<td align="left">as seen from first year in data or last year</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level4">
+<h4 id="switches">
+<code>switches</code><a class="anchor" aria-label="anchor" href="#switches"></a>
+</h4>
+<p>A summary in a <code>data.frame</code> of the
+<code>enrolments_degrees_compact()</code> which counts the switches from
+the first of the two academic year in the data to the second academic
+year. It can happen that someone switches to more than one program.</p>
+<p>Variables in <code>enrolments_degrees_compact</code>:</p>
+<table class="table">
+<colgroup>
+<col width="35%">
+<col width="64%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">variables</th>
+<th align="left">explanations</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">from_brin</td>
+<td align="left">the brin of the enrolment that stops</td>
+</tr>
+<tr class="even">
+<td align="left">from_program</td>
+<td align="left">the program code of the enrolment that stops</td>
+</tr>
+<tr class="odd">
+<td align="left">all_enrolments_otheryear</td>
+<td align="left">all enrolments in the coming year</td>
+</tr>
+<tr class="even">
+<td align="left">total_switch</td>
+<td align="left">how often this switch is observed in the data</td>
+</tr>
+<tr class="odd">
+<td align="left">with_prop</td>
+<td align="left">and how often with a propedeutic exam</td>
+</tr>
+<tr class="even">
+<td align="left">other</td>
+<td align="left">and how often without a propedeutic exam</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level4">
+<h4 id="summary_presences_brin-and-summary_presences_level">
+<code>summary_presences_brin</code> and
+<code>summary_presences_level</code><a class="anchor" aria-label="anchor" href="#summary_presences_brin-and-summary_presences_level"></a>
+</h4>
+<p>These small data.frames compare the situations regarding brin or
+level between the two academic years.</p>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -254,7 +700,7 @@ student_id becomes V3, with prefix “e” for educational number</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>

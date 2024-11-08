@@ -65,7 +65,7 @@
 </div>
 <!-- badges: start -->
 
-<p>Each Higher Educational Institute (HEI) in the Netherlands can request its institute-specific files named “Bekostigingsbestanden”. The functions in this package extract information from these files related to switching studies. It facilitates the HEIs gain insight in the prevalence of switching studies. Flows can be visualised by a Sankey diagram.</p>
+<p>Each Higher Educational Institute (HEI) in the Netherlands can request its institute-specific files named “Bekostigingsbestanden”. The functions in this package extract information from these files related to switching and continuing studies. It facilitates the HEIs gain insight in the prevalence of switching and/or continuing studies. Flows can be visualised by a Sankey diagram.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -80,17 +80,18 @@
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>Read in your VLPBEK file with <code><a href="reference/read_vlpbek_data.html">read_vlpbek_data()</a></code>:</p>
+<p>Read in your VLPBEK bekostigingsbestand file with <code><a href="reference/read_bek_data.html">read_bek_data()</a></code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">path_to_file</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu">here</span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"VLPBEK_2025_20240115_99XX.csv"</span><span class="op">)</span></span>
-<span><span class="va">my_vlpbek_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_vlpbek_data.html">read_vlpbek_data</a></span><span class="op">(</span><span class="va">path_to_file</span><span class="op">)</span></span></code></pre></div>
-<p>This results in one large data set. Hidden in that data set are different sub data sets, which contain information about enrolment and degrees. To ease the access to this information, make a <code>vlpbek</code> object with the function <code><a href="reference/vlpbek.html">vlpbek()</a></code>:</p>
+<span><span class="va">my_vlpbek_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_bek_data.html">read_bek_data</a></span><span class="op">(</span><span class="va">path_to_file</span><span class="op">)</span></span></code></pre></div>
+<p>This results in one large data set. Hidden in that data set are different sub data sets, which contain information about enrolment and degrees.</p>
+<p>To ease the access to this information, make a <code>flow_basics</code> object with the function <code><a href="reference/make_flow_basics.html">make_flow_basics()</a></code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_vlpbek</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vlpbek.html">vlpbek</a></span><span class="op">(</span><span class="va">my_vlpbek_data</span><span class="op">)</span></span></code></pre></div>
-<p>Gain insights by using the <code>compact_vlpbek</code> function. The resulting object contains summary information related to switching HEIs and/or programs, which can be plotted using for instance <code><a href="reference/plot_brinflows.html">plot_brinflows()</a></code>:</p>
+<code class="sourceCode R"><span><span class="va">my_flow_basics</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/make_flow_basics.html">make_flow_basics</a></span><span class="op">(</span><span class="va">my_vlpbek_data</span><span class="op">)</span></span></code></pre></div>
+<p>Gain insights by using the <code><a href="reference/make_flow_insights.html">make_flow_insights()</a></code> function. The resulting object contains summary information related to switching HEIs and/or programs, which can be plotted using for instance <code><a href="reference/plot_brinflows.html">plot_brinflows()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_vlpbek_compact</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/compact_vlpbek.html">compact_vlpbek</a></span><span class="op">(</span><span class="va">my_vlpbek</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/plot_brinflows.html">plot_brinflows</a></span><span class="op">(</span><span class="va">my_vlpbekcompact</span>, display_labels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">my_flow_insights</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/make_flow_insights.html">make_flow_insights</a></span><span class="op">(</span><span class="va">my_flow_basics</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/plot_brinflows.html">plot_brinflows</a></span><span class="op">(</span><span class="va">my_flow_insights</span>, display_labels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="vignettes">Vignettes<a class="anchor" aria-label="anchor" href="#vignettes"></a>
@@ -103,9 +104,15 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html" class="external-link">browseVignettes</a></span><span class="op">(</span><span class="st">"wisselstroom"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="credits">Credits<a class="anchor" aria-label="anchor" href="#credits"></a>
+<h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
 </h2>
-<p>The code for the Sankey diagram is adapted from code found end of may 2024 at <a href="https://github.com/ssp3nc3r/ggSankeyGrad" class="external-link uri">https://github.com/ssp3nc3r/ggSankeyGrad</a>.</p>
+<ul>
+<li>Thank you Npuls and Fontys University of Applied Sciences for providing the opportunity to develop this package</li>
+<li>Thank you co-workers from Fontys University of Applied Sciences for your interesting questions regarding switch</li>
+<li>Thank you Corneel, Bram, Tomer, Amir, Tony and Damiette for your valuable input</li>
+<li>The code for the Sankey diagram is adapted from code found end of may 2024 at <a href="https://github.com/ssp3nc3r/ggSankeyGrad" class="external-link uri">https://github.com/ssp3nc3r/ggSankeyGrad</a>
+</li>
+</ul>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
@@ -147,7 +154,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>
