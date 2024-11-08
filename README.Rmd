@@ -79,6 +79,9 @@ browseVignettes("wisselstroom")
 
 
 
-## Credits
+## Acknowledgements
 
-The code for the Sankey diagram is adapted from code found end of may 2024 at  https://github.com/ssp3nc3r/ggSankeyGrad. 
+-  Thank you Npuls and Fontys University of Applied Sciences for providing the opportunity to develop this package
+-  Thank you co-workers from Fontys University of Applied Sciences for your interesting questions regarding switch
+-  Thank you Corneel, Bram, Tomer, Amir, Tony and Damiette for your valuable input
+-  The code for the Sankey diagram is adapted from code found end of may 2024 at  https://github.com/ssp3nc3r/ggSankeyGrad 
