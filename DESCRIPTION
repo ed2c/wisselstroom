@@ -21,3 +21,4 @@ Imports:
     stringr,
     tidyr
 VignetteBuilder: knitr
+URL: https://ed2c.github.io/wisselstroom/
