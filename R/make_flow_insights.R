@@ -82,8 +82,9 @@ any_new_enrolments_otheryear <- function(enrolments_thisyear, enrolments_otherye
 #' }
 make_flow_insights <- function(my_flow_basics){
 
-  # validation of input type
+  # validation of input type, HISBEK not supported
   stopifnot(class(my_flow_basics) == "flow_basics")
+  stopifnot(my_flow_basics$type != "HISBEK")
 
   # helpers
   min_academic_year <- min(my_flow_basics$enrolments$academic_year)
