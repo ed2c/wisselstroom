@@ -54,7 +54,7 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a flow_insights object as a list with 7 objects</p>
+    <p>a flow_insights object as a list with 8 objects</p>
 <dl><dt>type</dt>
 <dd><p>text containing the type of bek file the data is from</p></dd>
 
@@ -68,7 +68,10 @@
 <dd><p>data frame with one row per academic year, student, brin and program_code, adorned with date_degree when applicable and a note if the student has at most a single enrolment per year</p></dd>
 
 <dt>switches</dt>
-<dd><p>dataframe with columns from_brin, from_program_code, to_brin_to_program_code, n_students for all students in df enrolment_degrees_compact, that have at most one enrolment per year, and did not receive a diploma in first year</p></dd>
+<dd><p>dataframe with columns from_academic_year, from_brin, from_program, to_enrolments, total_switch, with_prop, other, for  all enrolments in df enrolment_degrees_compact that ended in switch</p></dd>
+
+<dt>stacks</dt>
+<dd><p>dataframe with columns from_academic_year, from_brin, from_program, with_degree, to_academic_year, to_enrolments, total_stack,  for all enrolments in df enrolment_degrees_compact, that were followed up with stack</p></dd>
 
 <dt>summary_situations_brin</dt>
 <dd><p>situations_brin per academic year summarised over students</p></dd>

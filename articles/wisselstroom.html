@@ -247,18 +247,19 @@ bekostingsbestand):</p>
 <span><span class="va">my_flow_insights</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_flow_insights.html">make_flow_insights</a></span><span class="op">(</span><span class="va">my_flow_basics</span><span class="op">)</span></span>
 <span><span class="co"># have a look at the switches</span></span>
 <span><span class="va">my_flow_insights</span><span class="op">$</span><span class="va">switches</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 6</span></span></span>
-<span><span class="co">#&gt;   from_brin from_program all_enrolments_otheryear total_switch with_prop other</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 73CC      51021        HBO-BA-99XX-31007                   1         0     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 73CC      51025        HBO-BA-99XX-31009                   1         0     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 74DD      51025        HBO-BA-99XX-31009                   1         0     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 99XX      31005        HBO-BA-71AA-31005                   1         0     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 99XX      31006        HBO-BA-99XX-31007                   1         0     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 99XX      31008        HBO-BA-71AA-31024                   1         0     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> 99XX      31008        HBO-BA-99XX-31007                   1         0     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> 99XX      31011        HBO-BA-72BB-31010                   1         0     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> 99XX      31018        HBO-BA-99XX-31004                   1         0     1</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 8</span></span></span>
+<span><span class="co">#&gt;   from_academic_year from_brin from_program to_academic_year to_enrolments    </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2022/2023          73CC      51021        2023/2024        HBO-BA-99XX-31007</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2022/2023          73CC      51025        2023/2024        HBO-BA-99XX-31009</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2022/2023          74DD      51025        2023/2024        HBO-BA-99XX-31009</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 2022/2023          99XX      31005        2023/2024        HBO-BA-71AA-31005</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 2022/2023          99XX      31006        2023/2024        HBO-BA-99XX-31007</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 2022/2023          99XX      31008        2023/2024        HBO-BA-71AA-31024</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> 2022/2023          99XX      31008        2023/2024        HBO-BA-99XX-31007</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> 2022/2023          99XX      31011        2023/2024        HBO-BA-72BB-31010</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> 2022/2023          99XX      31018        2023/2024        HBO-BA-99XX-31004</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: total_switch &lt;int&gt;, with_prop &lt;int&gt;, other &lt;int&gt;</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="technical-details">Technical details<a class="anchor" aria-label="anchor" href="#technical-details"></a>

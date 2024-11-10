@@ -355,10 +355,10 @@ object:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">my_flow_insights</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "flow_insights"</span></span></code></pre></div>
-<p>The structure of this object is a list containing 7 elements:</p>
+<p>The structure of this object is a list containing 8 elements:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">my_flow_insights</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 7</span></span>
+<span><span class="co">#&gt; List of 8</span></span>
 <span><span class="co">#&gt;  $ type                      : chr "VLPBEK"</span></span>
 <span><span class="co">#&gt;  $ brin_own                  : chr "99XX"</span></span>
 <span><span class="co">#&gt;  $ date_retrieval            : Date[1:1], format: "2024-01-15"</span></span>
@@ -398,13 +398,23 @@ object:</p>
 <span><span class="co">#&gt;   ..$ any_new_otheryear        : logi [1:163] FALSE FALSE NA FALSE TRUE NA ...</span></span>
 <span><span class="co">#&gt;   ..$ flow                     : chr [1:163] "stay" "stay" "stop" "stay" ...</span></span>
 <span><span class="co">#&gt;   ..$ flow_direction           : chr [1:163] "flow_to" "flow_to" "flow_to" "flow_to" ...</span></span>
-<span><span class="co">#&gt;  $ switches                  : tibble [9 × 6] (S3: tbl_df/tbl/data.frame)</span></span>
-<span><span class="co">#&gt;   ..$ from_brin               : chr [1:9] "73CC" "73CC" "74DD" "99XX" ...</span></span>
-<span><span class="co">#&gt;   ..$ from_program            : chr [1:9] "51021" "51025" "51025" "31005" ...</span></span>
-<span><span class="co">#&gt;   ..$ all_enrolments_otheryear: chr [1:9] "HBO-BA-99XX-31007" "HBO-BA-99XX-31009" "HBO-BA-99XX-31009" "HBO-BA-71AA-31005" ...</span></span>
-<span><span class="co">#&gt;   ..$ total_switch            : int [1:9] 1 1 1 1 1 1 1 1 1</span></span>
-<span><span class="co">#&gt;   ..$ with_prop               : int [1:9] 0 0 0 0 0 0 0 0 0</span></span>
-<span><span class="co">#&gt;   ..$ other                   : int [1:9] 1 1 1 1 1 1 1 1 1</span></span>
+<span><span class="co">#&gt;  $ switches                  : tibble [9 × 8] (S3: tbl_df/tbl/data.frame)</span></span>
+<span><span class="co">#&gt;   ..$ from_academic_year: chr [1:9] "2022/2023" "2022/2023" "2022/2023" "2022/2023" ...</span></span>
+<span><span class="co">#&gt;   ..$ from_brin         : chr [1:9] "73CC" "73CC" "74DD" "99XX" ...</span></span>
+<span><span class="co">#&gt;   ..$ from_program      : chr [1:9] "51021" "51025" "51025" "31005" ...</span></span>
+<span><span class="co">#&gt;   ..$ to_academic_year  : chr [1:9] "2023/2024" "2023/2024" "2023/2024" "2023/2024" ...</span></span>
+<span><span class="co">#&gt;   ..$ to_enrolments     : chr [1:9] "HBO-BA-99XX-31007" "HBO-BA-99XX-31009" "HBO-BA-99XX-31009" "HBO-BA-71AA-31005" ...</span></span>
+<span><span class="co">#&gt;   ..$ total_switch      : int [1:9] 1 1 1 1 1 1 1 1 1</span></span>
+<span><span class="co">#&gt;   ..$ with_prop         : int [1:9] 0 0 0 0 0 0 0 0 0</span></span>
+<span><span class="co">#&gt;   ..$ other             : int [1:9] 1 1 1 1 1 1 1 1 1</span></span>
+<span><span class="co">#&gt;  $ stacks                    : tibble [1 × 7] (S3: tbl_df/tbl/data.frame)</span></span>
+<span><span class="co">#&gt;   ..$ from_academic_year: chr "2022/2023"</span></span>
+<span><span class="co">#&gt;   ..$ from_brin         : chr "99XX"</span></span>
+<span><span class="co">#&gt;   ..$ from_program      : chr "31009"</span></span>
+<span><span class="co">#&gt;   ..$ with_degree       : chr "B"</span></span>
+<span><span class="co">#&gt;   ..$ to_academic_year  : chr "2023/2024"</span></span>
+<span><span class="co">#&gt;   ..$ to_enrolments     : chr "WO-MA-77GG-61031"</span></span>
+<span><span class="co">#&gt;   ..$ total_stack       : int 1</span></span>
 <span><span class="co">#&gt;  $ summary_situations_brin   : tibble [6 × 3] (S3: tbl_df/tbl/data.frame)</span></span>
 <span><span class="co">#&gt;   ..$ situation_brin_2022/2023: chr [1:6] "brin_own" "brin_own" "brin_own" "brin_own &amp; other HE" ...</span></span>
 <span><span class="co">#&gt;   ..$ situation_brin_2023/2024: chr [1:6] "brin_own" "other HE" "outside HE" "other HE" ...</span></span>
@@ -430,6 +440,9 @@ with compact enrolment data, adorned with degree data if applicable</li>
 <li>
 <code>switches</code>: a <code>data.frame</code> containing data on
 switches (from a program without a degree to another program)</li>
+<li>
+<code>stacks</code>: a <code>data.frame</code> containing data on
+stacks (from a program with a degree to another program)</li>
 <li>
 <code>summary_presences_brin</code>: presences_brin per academic
 year summarised over students</li>
@@ -641,11 +654,11 @@ in this year</td>
 <code>enrolments_degrees_compact()</code> which counts the switches from
 the first of the two academic year in the data to the second academic
 year. It can happen that someone switches to more than one program.</p>
-<p>Variables in <code>enrolments_degrees_compact</code>:</p>
+<p>Variables in <code>switches</code>:</p>
 <table class="table">
 <colgroup>
-<col width="35%">
-<col width="64%">
+<col width="27%">
+<col width="72%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">variables</th>
@@ -653,20 +666,28 @@ year. It can happen that someone switches to more than one program.</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
+<td align="left">from_academic_year</td>
+<td align="left">the academic year of the enrolment that stops</td>
+</tr>
+<tr class="even">
 <td align="left">from_brin</td>
 <td align="left">the brin of the enrolment that stops</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">from_program</td>
 <td align="left">the program code of the enrolment that stops</td>
 </tr>
+<tr class="even">
+<td align="left">to_academic_year</td>
+<td align="left">the following academic year</td>
+</tr>
 <tr class="odd">
-<td align="left">all_enrolments_otheryear</td>
-<td align="left">all enrolments in the coming year</td>
+<td align="left">to_enrolments</td>
+<td align="left">all enrolments in the following academic year</td>
 </tr>
 <tr class="even">
 <td align="left">total_switch</td>
-<td align="left">how often this switch is observed in the data</td>
+<td align="left">the number of times this switch occurs in the data</td>
 </tr>
 <tr class="odd">
 <td align="left">with_prop</td>
@@ -675,6 +696,57 @@ year. It can happen that someone switches to more than one program.</p>
 <tr class="even">
 <td align="left">other</td>
 <td align="left">and how often without a propedeutic exam</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level4">
+<h4 id="stacks">
+<code>stacks</code><a class="anchor" aria-label="anchor" href="#stacks"></a>
+</h4>
+<p>A summary in a <code>data.frame</code> of the
+<code>enrolments_degrees_compact()</code> which counts the stacks from
+the first of the two academic year in the data to the second academic
+year.</p>
+<p>Variables in <code>stacks</code>:</p>
+<table class="table">
+<colgroup>
+<col width="26%">
+<col width="73%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">variables</th>
+<th align="left">explanations</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">from_academic_year</td>
+<td align="left">the academic year of the enrolment that stops</td>
+</tr>
+<tr class="even">
+<td align="left">from_brin</td>
+<td align="left">the brin of the enrolment that stops</td>
+</tr>
+<tr class="odd">
+<td align="left">from_program</td>
+<td align="left">the program code of the enrolment that stops</td>
+</tr>
+<tr class="even">
+<td align="left">with_degree</td>
+<td align="left">the final degree that was obtained for that
+program</td>
+</tr>
+<tr class="odd">
+<td align="left">to_academic_year</td>
+<td align="left">the following academic year</td>
+</tr>
+<tr class="even">
+<td align="left">to_enrolments</td>
+<td align="left">all enrolments in the following academic year</td>
+</tr>
+<tr class="odd">
+<td align="left">total_stack</td>
+<td align="left">the number of times this stack occurs in the data</td>
 </tr>
 </tbody>
 </table>
