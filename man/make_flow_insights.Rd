@@ -10,12 +10,13 @@ make_flow_insights(my_flow_basics)
 \item{my_flow_basics}{a flow_basics object}
 }
 \value{
-a flow_insights object as a list with 7 objects
+a flow_insights object as a list with 8 objects
 \item{type}{text containing the type of bek file the data is from}
 \item{brin_own}{text containing the brin of the higher educational institution to which the funding file refers to}
 \item{date_retrieval}{date containing the date the funding file was retrieved from DUO}
 \item{enrolments_degrees_compact}{data frame with one row per academic year, student, brin and program_code, adorned with date_degree when applicable and a note if the student has at most a single enrolment per year}
-\item{switches}{dataframe with columns from_brin, from_program_code, to_brin_to_program_code, n_students for all students in df enrolment_degrees_compact, that have at most one enrolment per year, and did not receive a diploma in first year}
+\item{switches}{dataframe with columns from_academic_year, from_brin, from_program, to_enrolments, total_switch, with_prop, other, for  all enrolments in df enrolment_degrees_compact that ended in switch}
+\item{stacks}{dataframe with columns from_academic_year, from_brin, from_program, with_degree, to_academic_year, to_enrolments, total_stack,  for all enrolments in df enrolment_degrees_compact, that were followed up with stack}
 \item{summary_situations_brin}{situations_brin per academic year summarised over students}
 \item{summary_situations_level}{situations_level per academic year summarised over students}
 }

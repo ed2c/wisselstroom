@@ -24,7 +24,9 @@ utils::globalVariables(c("program_level", "program_phase", "n_enrol",
                          "all_enrolments_otheryear", "flow_to", "from_brin",
                          "from_program", "n", "n_enrolments_otheryear",
                          "total_switch", "with_prop",
-                         "flow", "flow_direction", "flow_from"
+                         "flow", "flow_direction", "flow_from",
+                         "from_academic_year", "to_academic_year",
+                         "to_enrolments", "total_stack", "with_degree"
 
 ))
 
@@ -65,12 +67,13 @@ any_new_enrolments_otheryear <- function(enrolments_thisyear, enrolments_otherye
 #'
 #' @param my_flow_basics a flow_basics object
 #'
-#' @return a flow_insights object as a list with 7 objects
+#' @return a flow_insights object as a list with 8 objects
 #' \item{type}{text containing the type of bek file the data is from}
 #' \item{brin_own}{text containing the brin of the higher educational institution to which the funding file refers to}
 #' \item{date_retrieval}{date containing the date the funding file was retrieved from DUO}
 #' \item{enrolments_degrees_compact}{data frame with one row per academic year, student, brin and program_code, adorned with date_degree when applicable and a note if the student has at most a single enrolment per year}
-#' \item{switches}{dataframe with columns from_brin, from_program_code, to_brin_to_program_code, n_students for all students in df enrolment_degrees_compact, that have at most one enrolment per year, and did not receive a diploma in first year}
+#' \item{switches}{dataframe with columns from_academic_year, from_brin, from_program, to_enrolments, total_switch, with_prop, other, for  all enrolments in df enrolment_degrees_compact that ended in switch}
+#' \item{stacks}{dataframe with columns from_academic_year, from_brin, from_program, with_degree, to_academic_year, to_enrolments, total_stack,  for all enrolments in df enrolment_degrees_compact, that were followed up with stack}
 #' \item{summary_situations_brin}{situations_brin per academic year summarised over students}
 #' \item{summary_situations_level}{situations_level per academic year summarised over students}
 #'
@@ -239,16 +242,35 @@ make_flow_insights <- function(my_flow_basics){
     dplyr::filter(academic_year == min_academic_year,
                   flow == "switch",
                   flow_direction == "flow_to") |>
-    dplyr::count(from_brin = BRIN,
+    dplyr::count(from_academic_year = min_academic_year,
+                 from_brin = BRIN,
                  from_program = program_code,
-                 all_enrolments_otheryear,
+                 to_academic_year = max_academic_year,
+                 to_enrolments = all_enrolments_otheryear,
                  situation_degree) |>
-    dplyr::group_by(from_brin, from_program, all_enrolments_otheryear) |>
+    dplyr::group_by(from_academic_year,from_brin, from_program, to_academic_year, to_enrolments) |>
     dplyr::summarise(total_switch = sum(n),
                      with_prop = sum(n[situation_degree=="D"], na.rm = TRUE),
                      other = total_switch - with_prop) |>
     dplyr::ungroup() |>
     dplyr::arrange(-total_switch)
+
+  stacks <- enrolments_degrees_compact |>
+    dplyr::filter(academic_year == min_academic_year,
+                  flow == "stack",
+                  flow_direction == "flow_to") |>
+    # for the actual stack, there is no extra info in DB compared to B
+    dplyr::mutate(with_degree = ifelse(situation_degree == "DB",
+                                       "B",
+                                       situation_degree)) |>
+    dplyr::count(from_academic_year = min_academic_year,
+                 from_brin = BRIN,
+                 from_program = program_code,
+                 with_degree = with_degree,
+                 to_academic_year = max_academic_year,
+                 to_enrolments = all_enrolments_otheryear,
+                 name = "total_stack") |>
+    dplyr::arrange(-total_stack)
 
 
   summary_situations_brin <- enrolments_degrees_compact |>
@@ -278,6 +300,7 @@ make_flow_insights <- function(my_flow_basics){
                 date_retrieval = date_retrieval,
                 enrolments_degrees_compact = enrolments_degrees_compact,
                 switches = switches,
+                stacks = stacks,
                 summary_situations_brin = summary_situations_brin,
                 summary_situations_level = summary_situations_level
   )

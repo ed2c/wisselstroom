@@ -189,6 +189,7 @@ The elements of the list:
 -  `date_retrieval`: the date the original bekostigingsbestand is made
 -  `enrolments_degrees_compact`: a `data.frame` with compact enrolment data, adorned with degree data if applicable 
 -  `switches`: a `data.frame` containing data on switches (from a program without a degree to another program)
+-  `stacks`: a `data.frame` containing data on stacks (from a program with a degree to another program)
 -  `summary_presences_brin`: presences_brin per academic year summarised over students
 -  `summary_presences_level`: presences_level per academic year summarised over students
 
@@ -265,18 +266,44 @@ data.frame(variables, explanations) |> knitr::kable()
 
 A summary in a `data.frame` of the `enrolments_degrees_compact()` which counts the switches from the first of the two academic year in the data to the second academic year. It can happen that someone switches to more than one program.  
 
-Variables in `enrolments_degrees_compact`:
+Variables in `switches`:
 
 ```{r, echo = FALSE}
-data.frame(variables = c("from_brin", "from_program", "all_enrolments_otheryear", "total_switch", "with_prop", "other"),
-           explanations = c("the brin of the enrolment that stops",
+data.frame(variables = c("from_academic_year", "from_brin", "from_program",
+                         "to_academic_year", "to_enrolments", "total_switch",
+                         "with_prop", "other"),
+           explanations = c("the academic year of the enrolment that stops",
+                            "the brin of the enrolment that stops",
                             "the program code of the enrolment that stops",
-                            "all enrolments in the coming year",
-                            "how often this switch is observed in the data",
+                            "the following academic year",
+                            "all enrolments in the following academic year",
+                            "the number of times this switch occurs in the data",
                             "and how often with a propedeutic exam",
                             "and how often without a propedeutic exam")) |> knitr::kable()
 
 ```
+
+
+### `stacks`
+
+A summary in a `data.frame` of the `enrolments_degrees_compact()` which counts the stacks from the first of the two academic year in the data to the second academic year. 
+
+Variables in `stacks`:
+
+```{r, echo = FALSE}
+data.frame(variables = c("from_academic_year", "from_brin", "from_program",
+                         "with_degree", "to_academic_year", "to_enrolments",
+                         "total_stack"),
+           explanations = c("the academic year of the enrolment that stops",
+                            "the brin of the enrolment that stops",
+                            "the program code of the enrolment that stops",
+                            "the final degree that was obtained for that program",
+                            "the following academic year",
+                            "all enrolments in the following academic year",
+                            "the number of times this stack occurs in the data")) |> knitr::kable()
+
+```
+
 
 ### `summary_presences_brin` and `summary_presences_level`
 
