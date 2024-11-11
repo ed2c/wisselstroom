@@ -79,7 +79,8 @@ The package `wisselstroom` contains three main functions:
 Besides these three functions, there are some smaller functions:
 
 -  `plot_brinflows()`, to gain insight in flows to and from the own institution, on an aggregated level;
--  `after_degree()`, to gain insight in specific flows after obtaining a final or propedeutical degree.
+-  `after_degree()`, to gain insight in specific flows after obtaining a final or propedeutical degree;
+-  `find_flows()`, to gain insight in specific flows from or to another HEI
 
 There is one helper function that does not need information from a bekostigingsbestand:  
  
