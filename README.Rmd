@@ -78,6 +78,13 @@ browseVignettes("wisselstroom")
 ```  
 
 
+## Citation
+
+```{r}
+citation("wisselstroom")
+```
+
+
 
 ## Acknowledgements
 

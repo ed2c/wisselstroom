@@ -76,6 +76,25 @@ Browse the vignettes:
 browseVignettes("wisselstroom")
 ```
 
+## Citation
+
+``` r
+citation("wisselstroom")
+#> To cite package 'wisselstroom' in publications use:
+#> 
+#>   Jansen M (2024). _wisselstroom, an R package to obtain insight in
+#>   patterns of study programme switch_.
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Manual{,
+#>     title = {{wisselstroom}, an R package to obtain insight in patterns of study programme switch},
+#>     author = {Martine Jansen},
+#>     publisher = {Center for Educational Data Analytics (CEDA), NPuls},
+#>     year = {2024},
+#>   }
+```
+
 ## Acknowledgements
 
 - Thank you Npuls and Fontys University of Applied Sciences for
